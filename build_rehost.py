@@ -167,7 +167,9 @@ def card_info(name, group, ex=None):
     if name=='Other' and (group.startswith('OTA') or (ex and ex.get('ota')) or group=='Bookings'):
         return info_btn(*INFO_OTA_OTHER)
     tip=INFO_CARD.get(name)
-    return info_btn(*tip) if tip else ''
+    if not tip: return ''
+    extra='<a class="info-pop-link" href="#what-is-ai">What is AI? Read our plain-English guide</a>' if name=='AI consultation' else ''
+    return info_btn(*tip, extra)
 def svc_html():
     out=[]
     for n,(g,gi) in enumerate(GROUPS):
@@ -178,21 +180,24 @@ def svc_html():
         scount=f'{nsvc} service' if nsvc==1 else f'{nsvc} services'
         open0=n==0
         gtip=INFO_GROUP.get(g)
-        glink='<a class="info-pop-link" href="#what-is-ai">What is AI? Read our plain-English guide</a>' if g=='AI' else ''
+        guides={'AI':('#what-is-ai','What is AI? Read our plain-English guide'),'SEO':('#what-is-seo','What is SEO? Read our plain-English guide')}
+        ghref,glabel=guides.get(g,(None,None))
+        glink=f'<a class="info-pop-link" href="{ghref}">{glabel}</a>' if ghref else ''
         ginfo=f'<div class="group-info">{info_btn(*gtip, glink)}</div>' if gtip else ''
         out.append(f'<div class="group rv{" is-open" if open0 else ""}">')
         out.append(f'<div class="group-head"><h3><button type="button" class="group-toggle" id="group-btn-{slug}" aria-expanded="{"true" if open0 else "false"}" aria-controls="group-panel-{slug}"><span class="group-ic">{I(gi)}</span><span class="group-title">{E(title)}</span><span class="group-meta"><span class="group-count">{E(scount)}</span><span class="group-picked" hidden></span></span>{I("chev","chev")}</button></h3>{ginfo}</div>')
         out.append(f'<div class="group-body" id="group-panel-{slug}" role="region" aria-labelledby="group-btn-{slug}" aria-hidden="{"false" if open0 else "true"}"><div class="group-panel">')
-        if g=='AI':
-            out.append('<p class="group-guide"><a href="#what-is-ai">What is AI? Read our plain-English guide</a></p>')
+        if ghref:
+            out.append(f'<p class="group-guide"><a href="{ghref}">{glabel}</a></p>')
         for i,s in items:
             nm=E(s[2])
             ex=s[6] if len(s)>6 else None
             extra=' data-extra="1"' if ex else ''
             ota=bool(ex and ex.get('ota'))
             ic=f'<span class="svc-ic" aria-hidden="true">{I("plane")}</span>' if ota else ''
+            guide='<p class="svc-guide"><a href="#what-is-ai">What is AI? Read our plain-English guide</a></p>' if s[2]=='AI consultation' else ''
             out.append(f"""<article class="svc{" ota" if ota else ""}" data-i="{i}" data-area="{E(g)}" data-name="{nm}"{extra}>
-<div><h4>{ic}<span class="svc-name">{nm}</span>{card_info(s[2],g,ex)}{' <span class="addon">Add-on</span>' if s[5] else ''}</h4><p>{E(s[3])}</p></div>
+<div><h4>{ic}<span class="svc-name">{nm}</span>{card_info(s[2],g,ex)}{' <span class="addon">Add-on</span>' if s[5] else ''}</h4><p>{E(s[3])}</p>{guide}</div>
 <fieldset class="seg"><legend>Include {nm}?</legend>
 <label class="y"><input type="radio" name="s{i}" value="yes"><span>Yes</span></label>
 <label class="m"><input type="radio" name="s{i}" value="maybe"><span>Maybe</span></label>
@@ -559,6 +564,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <div class="rv"><span class="eyebrow" style="color:var(--sea-2)">AI consultation</span><h2 id="ai-h">How could AI help your business?</h2>
 <p class="lead">Book a consultation to talk through how AI and automation could help with the way your business already runs. We look at your day-to-day processes together, pick out the repetitive jobs, and talk plainly about where AI could help and where it wouldn\u2019t.</p>
 <p style="color:#a9b8c3">You decide what, if anything, to go ahead with. Anything we set up drafts for your approval first, unless you ask otherwise.</p>
+<p class="ai-guide"><a href="#what-is-ai">What is AI? Read our plain-English guide</a></p>
 <div class="ctas"><a class="btn btn--accent" data-pick-ai href="#services" style="background:var(--sea-2);color:var(--ink)">{I('spark')}Book an AI consultation</a><span class="ai-price">AI consultation \u2014 Price on request</span></div>
 </div>
 <div class="ai-art rv">{ai_art()}</div>
@@ -605,7 +611,21 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <div class="wai-note rv">{I('shield')}<div><b>It doesn\u2019t send anything without your OK</b><p>AI is not a replacement for your judgment, and it is not left to talk to your customers on its own. Nothing is sent, posted or ordered until you say so. We only use it on the work you ask us to handle, and you stay in control of your accounts and your customers\u2019 data.</p></div></div>
 </div></section>
 
-<section class="section" id="morning" aria-labelledby="mo-h"><div class="wrap morning">
+<section class="section" id="what-is-seo" aria-labelledby="wseo-h"><div class="wrap">
+<div class="head rv"><span class="eyebrow">A plain-English guide</span><h2 id="wseo-h">What is SEO?</h2>
+<p class="lead">SEO means making it easy for Google and other search engines to find, understand and show your site when people search \u2014 for example, \u201chotel Glengarriff\u201d. It is ongoing care, not a one-off job, and it is not instant.</p></div>
+<div class="wai-cards">
+<div class="wai-card rv">{I('layout')}<b>Titles, descriptions and structure</b><p>The titles and short descriptions Google shows, and a clear page structure, so search engines and customers can tell what each page is about, updated as your site changes.</p></div>
+<div class="wai-card rv">{I('bolt')}<b>Speed and mobile-friendliness</b><p>A site that loads quickly and works well on a phone is easier for people to use \u2014 and easier for Google to recommend.</p></div>
+<div class="wai-card rv">{I('map')}<b>Google Business Profile and local search</b><p>Your Google Business Profile, maps pin and local details kept accurate, so people searching nearby can find you and get the right hours, photos and directions.</p></div>
+<div class="wai-card rv">{I('list')}<b>Listings and directories</b><p>Your name, address, opening hours and photos kept consistent on Google and other directories, so customers are not sent to old or conflicting information.</p></div>
+<div class="wai-card rv">{I('star')}<b>Reviews</b><p>New reviews flagged and replies drafted for your approval. Fresh, answered reviews help people trust you, and they play a part in how you show up in local search.</p></div>
+<div class="wai-card rv">{I('chart')}<b>Fresh content, and what is working</b><p>Area pages and a news or events page give people \u2014 and Google \u2014 useful, up-to-date content. Analytics shows which pages are visited and how people found you, so you can see what is helping.</p></div>
+</div>
+<div class="wai-note rv">{I('search')}<div><b>No guaranteed top spot, and no tricks</b><p>We don\u2019t promise a number-one place on Google, and we don\u2019t use tricks or shortcuts that can get a site into trouble. SEO is steady, honest work: keep the site healthy, keep the details right, and improve it as your pages and your business change.</p></div></div>
+</div></section>
+
+<section class="section section--sand" id="morning" aria-labelledby="mo-h"><div class="wrap morning">
 <div class="rv"><span class="eyebrow">What your morning looks like</span><h2 id="mo-h">One message. Everything that needs you.</h2>
 <p class="lead">Each day starts with one WhatsApp message that tells you what needs your attention. Here\u2019s an example.</p>
 <div class="morning-points">

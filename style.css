@@ -474,8 +474,8 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 .hero--contact .wrap{grid-template-columns:1fr}
 @media (max-width:620px){.btn--call{width:100%;justify-content:center;font-size:1.12rem;padding:18px 20px}.callbox{align-items:stretch}}
 
-/* What is AI? explainer */
-#what-is-ai{scroll-margin-top:96px}
+/* What is AI? / What is SEO? explainers */
+#what-is-ai,#what-is-seo{scroll-margin-top:96px}
 .wai-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 @media (max-width:960px){.wai-cards{grid-template-columns:1fr 1fr}}
 @media (max-width:600px){.wai-cards{grid-template-columns:1fr}}
@@ -494,4 +494,12 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 .info-pop-link{display:inline-block;margin-top:10px;color:var(--sea-2);font-weight:700;text-decoration:underline}
 .info-pop-link:hover{color:#fff}
 .info-pop-link:focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-radius:4px}
+.svc-guide{margin:8px 0 0;font-size:.92rem}
+.svc-guide a{font-weight:700;color:var(--sea);text-decoration:none}
+.svc-guide a:hover{text-decoration:underline}
+.svc-guide a:focus-visible{outline:3px solid var(--coral);outline-offset:3px;border-radius:4px}
+#ai .ai-guide{margin:16px 0 0}
+#ai .ai-guide a{color:var(--sea-2);font-weight:700;text-decoration:none}
+#ai .ai-guide a:hover{text-decoration:underline}
+#ai .ai-guide a:focus-visible{outline:3px solid var(--coral);outline-offset:3px;border-radius:4px}
 

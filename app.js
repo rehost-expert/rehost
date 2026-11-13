@@ -282,7 +282,7 @@
   window.addEventListener('resize',function(){if(openBtn&&openPop)place(openBtn,openPop);});
   window.addEventListener('scroll',function(){if(openBtn&&openPop)place(openBtn,openPop);},true);
   document.addEventListener('click',function(e){
-    var a=e.target.closest&&e.target.closest('a[href="#what-is-ai"]');
+    var a=e.target.closest&&e.target.closest('a[href="#what-is-ai"], a[href="#what-is-seo"]');
     if(!a)return;
     e.stopPropagation();
     closeInfo();
