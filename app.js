@@ -90,18 +90,18 @@
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));
   if(!rows.length||!document.getElementById('send'))return;
-  var KEY='rehost-picks-v5',state={picks:{},extras:{}};
+  var KEY='rehost-picks-v6',state={picks:{},extras:{}};
   try{var raw=JSON.parse(localStorage.getItem(KEY)||'{}')||{};state.picks=raw.picks||{};state.extras=raw.extras||{};}catch(e){state={picks:{},extras:{}};}
   function extrasOf(r){return r.querySelectorAll('.svc-extras input, .svc-extras select');}
   function extrasOn(r,on){extrasOf(r).forEach(function(el){el.disabled=!on;});}
   function readExtras(r){
-    var i=r.dataset.i,x={},freq=r.querySelector('#s'+i+'-freq'),name=r.querySelector('#s'+i+'-name'),mon=r.querySelector('#s'+i+'-mon'),rep=r.querySelector('#s'+i+'-replies');
-    if(freq)x.freq=freq.value;if(name)x.name=name.value;if(mon)x.mon=!!mon.checked;if(rep)x.replies=!!rep.checked;
+    var i=r.dataset.i,x={},freq=r.querySelector('#s'+i+'-freq'),name=r.querySelector('#s'+i+'-name'),mon=r.querySelector('#s'+i+'-mon'),rep=r.querySelector('#s'+i+'-replies'),draft=r.querySelector('#s'+i+'-draft');
+    if(freq)x.freq=freq.value;if(name)x.name=name.value;if(mon)x.mon=!!mon.checked;if(rep)x.replies=!!rep.checked;if(draft)x.draft=!!draft.checked;
     return x;}
   function writeExtras(r,x){
     if(!x)return;
-    var i=r.dataset.i,freq=r.querySelector('#s'+i+'-freq'),name=r.querySelector('#s'+i+'-name'),mon=r.querySelector('#s'+i+'-mon'),rep=r.querySelector('#s'+i+'-replies');
-    if(freq&&x.freq)freq.value=x.freq;if(name&&typeof x.name==='string')name.value=x.name;if(mon)mon.checked=!!x.mon;if(rep)rep.checked=!!x.replies;}
+    var i=r.dataset.i,freq=r.querySelector('#s'+i+'-freq'),name=r.querySelector('#s'+i+'-name'),mon=r.querySelector('#s'+i+'-mon'),rep=r.querySelector('#s'+i+'-replies'),draft=r.querySelector('#s'+i+'-draft');
+    if(freq&&x.freq)freq.value=x.freq;if(name&&typeof x.name==='string')name.value=x.name;if(mon)mon.checked=!!x.mon;if(rep)rep.checked=!!x.replies;if(draft)draft.checked=!!x.draft;}
   function isPicked(v){return v==='yes'||v==='maybe';}
   rows.forEach(function(r){
     var i=r.dataset.i;
@@ -124,6 +124,7 @@
     if(x.name&&x.name.trim())n=n+': '+x.name.trim();
     if(x.mon)bits.push('Message monitoring');
     if(x.replies)bits.push('AI assisted replies');
+    if(x.draft)bits.push('AI assistant for drafting replies');
     if(bits.length)n+=' — '+bits.join(', ');
     if(x.freq)n+=' — '+x.freq;
     return n;}

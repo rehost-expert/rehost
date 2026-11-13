@@ -76,21 +76,21 @@ def BRAND(href): return f'<a class="brand" href="{href}" aria-label="rehost.expe
 # ---------------- services (generic, home page picker) ----------------
 SV=[
 ('Website','globe','Hosting and updates','Fast, low-cost hosting on your own domain with a secure (https) certificate. Text, photo, product, menu and price changes whenever you ask.','Changes within 2 working days',False),
-('Website','shield','Domain and certificate care','Your domain kept in your name and set to auto-renew, certificates renewed automatically, and both checked from outside every day so the padlock never lapses.','Checked daily',False,{'freq':('Check frequency',['Daily','Weekly','Monthly'],'Daily')}),
+('Website','shield','Domain and certificate care','Your domain kept in your name and set to auto-renew, certificates renewed automatically, and both checked from outside every day so the padlock never lapses.','Checked daily',False),
 ('Website','wrench','Fixes and rebuilds','Broken pages, WordPress errors, out-of-date plugins and slow, non-mobile sites repaired, or rebuilt on simple hosting with nothing to patch.','On request',False),
 ('Website','layout','Website redesign','A fresh, modern look and clearer layout for your current site: mobile-friendly and fast, keeping your content, photos and domain. Whether your site stays where it is or moves to us.','One-off \u00b7 Price on request',False),
-('Website','map','Area pages with maps','Pages on your area, what\u2019s nearby and how to find you, with a map. Customers find you in more local Google searches.','New page each season',False,{'freq':('Update frequency',['Each season','Twice a year','Yearly'],'Each season')}),
-('Website','cal','News and events page','A news, offers or events page customers can follow, with bank holidays and seasonal hours marked.','Updates automatically',False),
-('Bookings','sync','Live bookings and availability calendar','Your website calendar stays in sync with your booking or appointment system, so customers never pick a time or date that\u2019s already taken.','Every hour',False,{'freq':('Update frequency',['Hourly','Every 4 hours','Daily'],'Hourly')}),
+('Website','map','Area pages with maps','Pages on your area, what\u2019s nearby and how to find you, with a map. Customers find you in more local Google searches.','New page each season',False),
+('Website','cal','News and events page','A news, offers or events page customers can follow, with bank holidays and seasonal hours marked.','Updates automatically',False,{'freq':('Update frequency',['Weekly','Monthly','Quarterly'],'Monthly')}),
+('Bookings','sync','Live bookings and availability calendar','Your website calendar stays in sync with your booking or appointment system, so customers never pick a time or date that\u2019s already taken.','Every hour',False),
 ('Bookings','list','Listings and directories','Your Google Business Profile, directory and booking-site listings, photos and opening hours kept accurate and up to date.','Monthly check, plus on request',False,{'freq':('Check frequency',['Weekly','Monthly','On request'],'Monthly')}),
-('Customers','mail','Configure Business email','Your business email set up on your own domain, such as you@yourbusiness.ie, with mailboxes connected and records pointed the right way so messages arrive reliably.','One-off',False),
+('Customers','mail','Configure Business email','Cloud-based business email on your own domain, such as you@yourbusiness.ie, that you can access anywhere, on any device.','One-off',False),
 ('Customers','inbox','AI Email inbox management','Business inbox sorted, replies to enquiries drafted for you to approve, and reminders for anything needing a follow-up.','Daily',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
-('Social','camera','Instagram','DMs and comments checked, real enquiries flagged, spam ignored. Replies drafted for enquiries.','Daily checks',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
-('Social','chat','Facebook','Messages and comments checked, enquiries flagged. Replies drafted for enquiries.','Daily checks',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
+('Social','camera','Instagram','DMs and comments checked, real enquiries flagged, spam ignored.','Daily checks',False,{'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
+('Social','chat','Facebook','Messages and comments checked, enquiries flagged.','Daily checks',False,{'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Social','pen','Posts','A quarterly or six-monthly content calendar with posts, stories and reels written and scheduled across Instagram and Facebook, including offers, new stock and events.','Weekly or monthly',False,{'freq':('Update frequency',['Quarterly','Six-monthly'],'Quarterly')}),
-('Social','hash','X (Twitter)','Posts on local news and updates from your business, with mentions and replies checked.','Weekly',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Weekly')}),
-('Social','video','TikTok','Short videos of your work, products, premises and the area, planned and posted for you.','Weekly or monthly',False,{'freq':('Update frequency',['Weekly','Monthly'],'Weekly')}),
-('Social','link','Another','Another social network you use. Tell us the name, and we\u2019ll check messages and comments, flag enquiries, and draft replies.','As you choose',False,{'name':('Name of the social network','e.g. LinkedIn'),'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
+('Social','hash','X (Twitter)','Posts on local news and updates from your business, with mentions and replies checked.','Weekly',False,{'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Weekly')}),
+('Social','video','TikTok','Short videos of your work, products, premises and the area, planned and posted for you.','Weekly or monthly',False,{'draft':True,'freq':('Update frequency',['Hourly','Weekly','Monthly'],'Weekly')}),
+('Social','link','Another','Another social network you use. Tell us the name, and we\u2019ll check messages and comments, and flag enquiries.','As you choose',False,{'name':('Name of the social network','e.g. LinkedIn'),'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Reviews','search','Google reviews','New Google reviews flagged and replies drafted for your approval, so every customer gets an answer.','Daily checks',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
 ('Reviews','star','Other review sites','TripAdvisor, Facebook recommendations or the review sites your customers use: new reviews flagged and replies drafted for your approval.','Daily checks',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
 ('OTA (Online Travel Agency)','plane','Booking Holdings','Messages from Booking.com and the other Booking Holdings sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
@@ -116,6 +116,8 @@ def extras_html(i,ex):
         bits.append(f'<label class="xlab" for="s{i}-name">{E(lab)}<input type="text" id="s{i}-name" name="s{i}-name" maxlength="80" placeholder="{E(ph)}" autocomplete="off" disabled></label>')
     if ex.get('ota'):
         bits.append(f'<div class="xopts" role="group" aria-label="OTA options"><label class="xchk"><input type="checkbox" id="s{i}-mon" name="s{i}-mon" disabled> Message monitoring</label><label class="xchk"><input type="checkbox" id="s{i}-replies" name="s{i}-replies" disabled> AI assisted replies</label></div>')
+    if ex.get('draft'):
+        bits.append(f'<div class="xopts" role="group" aria-label="Reply options"><label class="xchk"><input type="checkbox" id="s{i}-draft" name="s{i}-draft" disabled> AI assistant for drafting replies</label></div>')
     if ex.get('freq'):
         lab,opts,default=ex['freq']
         ops=''.join(f'<option value="{E(o)}"{(" selected" if o==default else "")}>{E(o)}</option>' for o in opts)
