@@ -80,18 +80,18 @@ SV=[
 ('Website','wrench','Fixes and rebuilds','Broken pages, WordPress errors, out-of-date plugins and slow, non-mobile sites repaired, or rebuilt on simple hosting with nothing to patch.','On request',False),
 ('Website','layout','Website redesign','A fresh, modern look and clearer layout for your current site: mobile-friendly and fast, keeping your content, photos and domain. Whether your site stays where it is or moves to us.','One-off \u00b7 Price on request',False),
 ('Website','map','Area pages with maps','Pages on your area, what\u2019s nearby and how to find you, with a map. Customers find you in more local Google searches.','New page each season',False),
-('Website','cal','News and events page','A news, offers or events page customers can follow, with bank holidays and seasonal hours marked.','Updates automatically',False,{'freq':('Update frequency',['Weekly','Monthly','Quarterly'],'Monthly')}),
-('Bookings','sync','Live bookings and availability calendar','Your website calendar stays in sync with your booking or appointment system, so customers never pick a time or date that\u2019s already taken.','Every hour',False),
-('Bookings','list','Listings and directories','Your Google Business Profile, directory and booking-site listings, photos and opening hours kept accurate and up to date.','Monthly check, plus on request',False,{'freq':('Check frequency',['Weekly','Monthly','On request'],'Monthly')}),
+('Website','cal','News and events page','A news, offers or events page customers can follow, with bank holidays and seasonal hours marked.','Updates automatically',False,{'freq':('Update frequency',['Daily','Weekly','Monthly','Quarterly'],'Monthly')}),
+('Bookings','sync','Live bookings and availability calendar','Your website calendar stays in sync with your booking system and your OTAs (Booking.com, Airbnb, Expedia and others), so availability stays in step and you avoid double bookings.','Every hour',False),
+('Bookings','list','Listings and directories','Your Google Business Profile, directory and booking-site listings, photos and opening hours kept accurate and up to date.','Monthly check, plus on request',False,{'freq':('Check frequency',['Daily','Weekly','Monthly','On request'],'Monthly')}),
 ('Customers','mail','Configure Business email','Cloud-based business email on your own domain, such as you@yourbusiness.ie, that you can access anywhere, on any device.','One-off',False),
-('Customers','inbox','AI Email inbox management','Business inbox sorted, replies to enquiries drafted for you to approve, and reminders for anything needing a follow-up.','Daily',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
+('Customers','inbox','AI Email inbox management','Business inbox sorted, replies to enquiries drafted for you to approve, and reminders for anything needing a follow-up.','Daily',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly','Custom'],'Daily'),'custom':True}),
 ('Social','camera','Instagram','DMs and comments checked, real enquiries flagged, spam ignored.','Daily checks',False,{'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Social','chat','Facebook','Messages and comments checked, enquiries flagged.','Daily checks',False,{'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
-('Social','pen','Posts','A quarterly or six-monthly content calendar with posts, stories and reels written and scheduled across Instagram and Facebook, including offers, new stock and events.','Weekly or monthly',False,{'freq':('Update frequency',['Quarterly','Six-monthly'],'Quarterly')}),
+('Social','pen','Posts','A content calendar with posts, stories and reels written and scheduled across Instagram and Facebook, including offers, new stock and events.','Weekly or monthly',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Quarterly','Six-monthly'],'Weekly')}),
 ('Social','hash','X (Twitter)','Posts on local news and updates from your business, with mentions and replies checked.','Weekly',False,{'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Weekly')}),
 ('Social','video','TikTok','Short videos of your work, products, premises and the area, planned and posted for you.','Weekly or monthly',False,{'draft':True,'freq':('Update frequency',['Hourly','Weekly','Monthly'],'Weekly')}),
 ('Social','link','Another','Another social network you use. Tell us the name, and we\u2019ll check messages and comments, and flag enquiries.','As you choose',False,{'name':('Name of the social network','e.g. LinkedIn'),'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
-('Reviews','search','Google reviews','New Google reviews flagged and replies drafted for your approval, so every customer gets an answer.','Daily checks',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
+('Reviews','search','Google reviews','New Google reviews flagged and replies drafted for your approval, so every customer gets an answer.','Daily checks',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Reviews','star','Other review sites','TripAdvisor, Facebook recommendations or the review sites your customers use: new reviews flagged and replies drafted for your approval.','Daily checks',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
 ('OTA (Online Travel Agency)','plane','Booking Holdings','Messages from Booking.com and the other Booking Holdings sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
 ('OTA (Online Travel Agency)','plane','Expedia Group','Messages from Expedia, Hotels.com, Vrbo and the other Expedia Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
@@ -99,10 +99,10 @@ SV=[
 ('OTA (Online Travel Agency)','plane','Trip.com Group','Messages from Trip.com and the other Trip.com Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
 ('OTA (Online Travel Agency)','link','Other','Another booking or travel site you use. Tell us the name, and we\u2019ll watch messages and draft replies as you choose.','As you choose',False,{'name':('Name of the site','e.g. Vrbo'),'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
 ('Admin','sun','WhatsApp morning summary','One message each morning to you or your staff: new enquiries, bookings or orders, emails needing a reply, reviews and anything to do with the website.','Every morning',False,{'freq':('Update frequency',['Every morning','Weekdays only','Weekly'],'Every morning')}),
-('Admin','bolt','Utility costs monitoring','Electricity, heating, water and broadband costs tracked against how busy you were and the same month last year, using smart-meter data where available. Unusual jumps, billing errors and cheaper tariffs flagged.','Monthly report',False,{'freq':('Update frequency',['Monthly','Quarterly'],'Monthly')}),
-('AI','spark','AI consultation','A consultation to talk through how AI could help your business: automating repetitive admin, answering enquiries, summaries and reports, bookings and ordering, drafting posts and emails, and linking up the tools you already use.','One-off, price on request',False),
-('SEO','search','SEO Site Management','Ongoing care of how your site appears in search: technical health, titles and content, and updates as your pages change, so customers can keep finding you on Google.','Monthly',False,{'freq':('Update frequency',['Weekly','Monthly','Quarterly'],'Monthly')}),
-('Add-on','search','SEO and Google visibility','Page titles and descriptions written for the searches your customers make, your business details marked up for Google, and a short monthly report on how people find you.','Monthly',True,{'freq':('Update frequency',['Weekly','Monthly','Quarterly'],'Monthly')}),
+('Admin','bolt','Utility costs monitoring','Electricity, heating, water and broadband costs tracked against how busy you were and the same month last year, using smart-meter data where available. Unusual jumps, billing errors and cheaper tariffs flagged.','Monthly report',False,{'freq':('Update frequency',['Daily','Weekly','Monthly','Quarterly'],'Monthly')}),
+('AI','spark','AI consultation','A consultation to talk through how AI could help your business: automating admin, answering enquiries, bookings and ordering, drafting posts and emails, working out quantities from plans for ordering materials (like a QS), generating 3D drawings from plans, and linking up the tools you already use.','One-off, price on request',False),
+('SEO','search','SEO Site Management','Ongoing care of how your site appears in search and on Google: technical health, titles and content, your Google Business Profile, and the keywords your customers search for, updated as your pages change.','Monthly',False),
+('SEO','chart','Analytics','Website traffic monitored for you — visitors, top pages and where they come from — with a privacy-friendly tracker and a regular report.','Weekly report',False,{'freq':('Report frequency',['Daily','Weekly','Monthly'],'Weekly')}),
 ('Add-on','basket','AI Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, and approved by you on WhatsApp before they go.','Weekly',True,{'freq':('Update frequency',['Weekly','Monthly'],'Weekly')}),
 ]
 GROUPS=[('Website','globe'),('Bookings','cal'),('Customers','inbox'),('Social','chat'),('Reviews','star'),('OTA (Online Travel Agency)','plane'),('Admin','chart'),('AI','spark'),('SEO','search'),('Add-on','basket')]
@@ -122,6 +122,8 @@ def extras_html(i,ex):
         lab,opts,default=ex['freq']
         ops=''.join(f'<option value="{E(o)}"{(" selected" if o==default else "")}>{E(o)}</option>' for o in opts)
         bits.append(f'<label class="xlab" for="s{i}-freq">{E(lab)}<select id="s{i}-freq" name="s{i}-freq" disabled>{ops}</select></label>')
+        if ex.get('custom') or 'Custom' in opts:
+            bits.append(f'<label class="xlab freq-custom" for="s{i}-custom" hidden>Tell us how often<input type="text" id="s{i}-custom" name="s{i}-custom" maxlength="80" placeholder="e.g. twice a day, weekdays only" autocomplete="off" disabled></label>')
     return f'<div class="svc-extras">{"".join(bits)}</div>'
 
 def svc_html():
@@ -222,12 +224,11 @@ def plans_html():
         li=(f'<li class="inh">{I("check")}{E(inh)}</li>' if inh else '')+''.join(f'<li>{I("check")}{E(x)}</li>' for x in inc)
         o.append(f'<article class="plan rv{" feat" if feat else ""}"><h3>{E(n)}</h3><p class="muted">{E(d)}</p><div class="price" aria-label="Monthly fee: to be confirmed"><b>\u20ac[&nbsp;&nbsp;]</b><small>/ month ex VAT</small></div><span class="por">Price on request</span><ul>{li}</ul></article>')
     return '\n'.join(o)
-ADDONS_G=[('search','SEO and Google visibility','Your Google Business Profile kept up to date, page titles and descriptions written for the searches your customers make, your business details marked up for Google, and a short monthly report on how people find you.'),
-('basket','AI Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, approved on WhatsApp and sent to your suppliers. Adds to any package. <a href="business.html#ordering">See the hospitality example</a>.'),
+ADDONS_G=[('basket','AI Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, approved on WhatsApp and sent to your suppliers. Adds to any package. <a href="business.html#ordering">See the hospitality example</a>.'),
 ('spark','AI consultation','A one-off consultation to talk through where AI could help your business, and where it wouldn\u2019t. <a href="#ai">What we cover</a>.','POR')]
 ADDONS_H=[('basket','Food ordering automation','Weekly food order built from bookings, updated as bookings change, approved on WhatsApp and sent to your suppliers. Adds to any package; needs access to your booking confirmation emails.'),
 ('glass','Drink ordering automation','Weekly drinks order built from bookings, events and the time of year, timed for each supplier\u2019s delivery day and approved on WhatsApp. Adds to any package.'),
-('search','SEO and Google visibility','Your Google Business Profile kept up to date, page titles and descriptions written for the searches guests make, hotel and restaurant details marked up for Google, and a short monthly report on how people find you.')]
+('search','SEO Site Management','Ongoing care of how your site appears in search and on Google: technical health, titles and content, your Google Business Profile, hotel and restaurant details marked up for Google, and the searches guests make.')]
 def addons_html(L):
     o=[]
     for it in L:
@@ -510,7 +511,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 </div></section>
 
 <section class="section" id="services" aria-labelledby="pk-h"><div class="wrap">
-<div class="head rv"><span class="eyebrow">What we\u2019ll handle for you</span><h2 id="pk-h">{NUMW.get(N_CORE,N_CORE)} services and {'two' if N_ADD==2 else N_ADD} add-ons. Pick what you need.</h2><p class="lead">They\u2019re grouped by what they do for your business. Choose Yes, Maybe or No for each one. Your picks add up on the right, and you can email them to us in one click.</p></div>
+<div class="head rv"><span class="eyebrow">What we\u2019ll handle for you</span><h2 id="pk-h">{NUMW.get(N_CORE,N_CORE)} services and { {0:'no add-ons',1:'one add-on',2:'two add-ons'}.get(N_ADD, str(N_ADD)+' add-ons') }. Pick what you need.</h2><p class="lead">They\u2019re grouped by what they do for your business. Choose Yes, Maybe or No for each one. Your picks add up on the right, and you can email them to us in one click.</p></div>
 <div class="picker">
 <div id="svc-list">{svc_html()}</div>
 <aside class="summary" aria-labelledby="sum-h" aria-live="polite">
@@ -555,7 +556,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <section class="section section--sand" id="packages" aria-labelledby="pa-h"><div class="wrap">
 <div class="head rv"><span class="eyebrow">Packages</span><h2 id="pa-h">Three monthly packages. Add what you need.</h2><p class="lead">Three monthly packages, add-ons and an AI consultation, plus a one-off setup fee to build or move the site and connect your accounts. Prices are per month, excluding VAT.</p></div>
 <div class="plans">{plans_html()}</div>
-<div class="addons">{addons_html(ADDONS_G)}</div>
+<div class="addons{' two' if len(ADDONS_G)==2 else ''}">{addons_html(ADDONS_G)}</div>
 <div class="terms terms--2">
 <div class="rv">{I('doc')}<span><b>One-off setup: \u20ac[&nbsp;&nbsp;]</b><span>Covers building or moving the website, connecting your accounts, and setting up your first pages.</span></span></div>
 <div class="rv">{I('handshake')}<span><b>No long contract</b><span>Month to month, with one month\u2019s notice either way.</span></span></div>
