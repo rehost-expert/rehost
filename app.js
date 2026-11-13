@@ -90,19 +90,47 @@
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));
   if(!rows.length||!document.getElementById('send'))return;
-  var KEY='rehost-picks-v3',state={};
-  try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){state={};}
-  rows.forEach(function(r){var i=r.dataset.i;if(state[i]){var inp=r.querySelector('input[value='+state[i]+']');if(inp){inp.checked=true;r.dataset.v=state[i];}}
-    r.addEventListener('change',function(e){state[i]=e.target.value;r.dataset.v=e.target.value;save();render();});});
+  var KEY='rehost-picks-v4',state={picks:{},extras:{}};
+  try{var raw=JSON.parse(localStorage.getItem(KEY)||'{}')||{};state.picks=raw.picks||{};state.extras=raw.extras||{};}catch(e){state={picks:{},extras:{}};}
+  function extrasOf(r){return r.querySelectorAll('.svc-extras input, .svc-extras select');}
+  function extrasOn(r,on){extrasOf(r).forEach(function(el){el.disabled=!on;});}
+  function readExtras(r){
+    var i=r.dataset.i,x={},freq=r.querySelector('#s'+i+'-freq'),name=r.querySelector('#s'+i+'-name'),mon=r.querySelector('#s'+i+'-mon'),rep=r.querySelector('#s'+i+'-replies');
+    if(freq)x.freq=freq.value;if(name)x.name=name.value;if(mon)x.mon=!!mon.checked;if(rep)x.replies=!!rep.checked;
+    return x;}
+  function writeExtras(r,x){
+    if(!x)return;
+    var i=r.dataset.i,freq=r.querySelector('#s'+i+'-freq'),name=r.querySelector('#s'+i+'-name'),mon=r.querySelector('#s'+i+'-mon'),rep=r.querySelector('#s'+i+'-replies');
+    if(freq&&x.freq)freq.value=x.freq;if(name&&typeof x.name==='string')name.value=x.name;if(mon)mon.checked=!!x.mon;if(rep)rep.checked=!!x.replies;}
+  function isPicked(v){return v==='yes'||v==='maybe';}
+  rows.forEach(function(r){
+    var i=r.dataset.i;
+    if(state.picks[i]){var inp=r.querySelector('input[type=radio][value="'+state.picks[i]+'"]');if(inp){inp.checked=true;r.dataset.v=state.picks[i];}}
+    writeExtras(r,state.extras[i]);
+    extrasOn(r,isPicked(state.picks[i]));
+    r.addEventListener('change',function(e){
+      if(e.target.matches('input[type=radio][name="s'+i+'"]')){
+        state.picks[i]=e.target.value;r.dataset.v=e.target.value;extrasOn(r,isPicked(e.target.value));
+      }
+      if(r.dataset.extra)state.extras[i]=readExtras(r);
+      save();render();});});
   function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
   var $=function(id){return document.getElementById(id);};
   function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-  function pick(v){return rows.filter(function(r){return state[r.dataset.i]===v;});}
+  function pick(v){return rows.filter(function(r){return state.picks[r.dataset.i]===v;});}
   function nm(r){return r.dataset.name.replace(/&amp;/g,'&');}
+  function label(r){
+    var n=nm(r),x=isPicked(state.picks[r.dataset.i])?(state.extras[r.dataset.i]||readExtras(r)):{},bits=[];
+    if(x.name&&x.name.trim())n=n+': '+x.name.trim();
+    if(x.mon)bits.push('Message monitoring');
+    if(x.replies)bits.push('AI assisted replies');
+    if(bits.length)n+=' — '+bits.join(', ');
+    if(x.freq)n+=' — '+x.freq;
+    return n;}
   function suggest(yes){
     var names=yes.map(nm),has=function(a){return a.some(function(x){return names.indexOf(x)>-1;});};
     if(!names.length)return null;
-    var pkg=has(['Instagram','Facebook','Email inbox management','WhatsApp morning summary','Posts','X (Twitter)','TikTok','Google reviews','Other review sites'])?'Full service':has(['Area pages with maps','News and events page','Listings and directories','Live bookings or availability calendar'])?'Growth':'Essentials';
+    var pkg=has(['Instagram','Facebook','AI Email inbox management','WhatsApp morning summary','Posts','X (Twitter)','TikTok','Google reviews','Other review sites'])?'Full service':has(['Area pages with maps','News and events page','Listings and directories','Live bookings and availability calendar'])?'Growth':'Essentials';
     var add=names.filter(function(x){return /ordering automation|SEO|AI consultation/.test(x);});
     if(add.length===names.length)pkg=null;
     return {pkg:pkg,add:add};
@@ -114,16 +142,16 @@
     mt.querySelector('.y').style.width=(y.length/tot*100)+'%';mt.querySelector('.m').style.width=(m.length/tot*100)+'%';mt.querySelector('.n').style.width=(n.length/tot*100)+'%';
     $('sum-sub').textContent=(y.length+m.length+n.length)?(left?left+' still to decide.':'All '+tot+' decided. Nice one.'):'Nothing picked yet. Choose Yes, Maybe or No for each service.';
     var h='';
-    if(y.length)h+='<h4>Yes</h4><ul>'+y.map(function(r){return '<li>'+esc(nm(r))+'</li>';}).join('')+'</ul>';
-    if(m.length)h+='<h4>Maybe</h4><ul>'+m.map(function(r){return '<li>'+esc(nm(r))+'</li>';}).join('')+'</ul>';
+    if(y.length)h+='<h4>Yes</h4><ul>'+y.map(function(r){return '<li>'+esc(label(r))+'</li>';}).join('')+'</ul>';
+    if(m.length)h+='<h4>Maybe</h4><ul>'+m.map(function(r){return '<li>'+esc(label(r))+'</li>';}).join('')+'</ul>';
     $('chosen').innerHTML=h||'<p class="empty">Your Yes and Maybe picks will appear here.</p>';
     var s=suggest(y),sg=$('suggest');
     if(s){sg.hidden=false;sg.innerHTML=(s.pkg?'Closest package: <b>'+s.pkg+'</b>'+(s.add.length?' + '+s.add.length+' extra'+(s.add.length>1?'s':''):''):'<b>'+esc(s.add.join(', '))+'</b> on its own, or with any package')+'. <a href="#packages" style="color:#5eead4">See packages</a>';}else sg.hidden=true;
   }
   function selectionText(){
     var L=['Services selection:',''];
-    ['yes','maybe','no'].forEach(function(v){var list=pick(v);if(!list.length)return;L.push((v==='yes'?'Yes':v==='maybe'?'Maybe':'No')+' ('+list.length+')');list.forEach(function(r){L.push('- '+nm(r)+' ['+r.dataset.area+']');});L.push('');});
-    var undec=rows.filter(function(r){return !state[r.dataset.i];}).length;
+    ['yes','maybe','no'].forEach(function(v){var list=pick(v);if(!list.length)return;L.push((v==='yes'?'Yes':v==='maybe'?'Maybe':'No')+' ('+list.length+')');list.forEach(function(r){L.push('- '+label(r)+' ['+r.dataset.area+']');});L.push('');});
+    var undec=rows.filter(function(r){return !state.picks[r.dataset.i];}).length;
     if(undec)L.push('Not decided: '+undec+' service'+(undec>1?'s':''),'');
     var s=suggest(pick('yes'));if(s)L.push(s.pkg?'Closest package: '+s.pkg+(s.add.length?' + '+s.add.join(', '):''):'Extras only: '+s.add.join(', '),'');
     var notes=$('f-notes').value.trim();if(notes)L.push('Notes:',notes);
@@ -144,11 +172,11 @@
       thanks.hidden=false;thanks.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});});});
   // "Book an AI consultation": mark AI consultation as Yes and jump to the selection panel
   function pickAI(){var r=rows.filter(function(x){return nm(x)==='AI consultation';})[0];if(!r)return;
-    state[r.dataset.i]='yes';r.dataset.v='yes';var inp=r.querySelector('input[value=yes]');if(inp)inp.checked=true;save();render();
+    state.picks[r.dataset.i]='yes';r.dataset.v='yes';var inp=r.querySelector('input[value=yes]');if(inp)inp.checked=true;save();render();
     var p=document.querySelector('aside.summary');if(p)p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
     var first=CKEYS.map(function(k){return $('f-'+k);}).filter(function(x){return !x.value.trim();})[0];if(first)setTimeout(function(){first.focus({preventScroll:true});},400);}
   document.querySelectorAll('[data-pick-ai]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();pickAI();});});
-  $('reset').addEventListener('click',function(){state={};save();rows.forEach(function(r){delete r.dataset.v;r.querySelectorAll('input').forEach(function(i){i.checked=false;});});render();});
+  $('reset').addEventListener('click',function(){state={picks:{},extras:{}};save();rows.forEach(function(r){delete r.dataset.v;r.querySelectorAll('input[type=radio]').forEach(function(i){i.checked=false;});r.querySelectorAll('.svc-extras input[type=text]').forEach(function(i){i.value='';});r.querySelectorAll('.svc-extras input[type=checkbox]').forEach(function(i){i.checked=false;});r.querySelectorAll('.svc-extras select').forEach(function(s){s.selectedIndex=s.querySelector('option[selected]')?Math.max(0,[].slice.call(s.options).findIndex(function(o){return o.hasAttribute('selected');})):0;});extrasOn(r,false);});render();});
   render();
   if(/[?&]pick=ai\b/.test(location.search))setTimeout(pickAI,300);
 })();

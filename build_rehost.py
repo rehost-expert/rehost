@@ -59,6 +59,7 @@ ICONS.update({
 'tag':'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/>',
 'phone':'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
 'link':'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+'plane':'<path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9L2 14v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>',
 })
 OUTDIR='/workspace/rehost-repo/'
 # Cache-busting: ?v= is a hash of the asset files, so every change to style.css/app.js/favicon.svg gets a new URL
@@ -80,39 +81,63 @@ SV=[
 ('Website','layout','Website redesign','A fresh, modern look and clearer layout for your current site: mobile-friendly and fast, keeping your content, photos and domain. Whether your site stays where it is or moves to us.','One-off \u00b7 Price on request',False),
 ('Website','map','Area pages with maps','Pages on your area, what\u2019s nearby and how to find you, with a map. Customers find you in more local Google searches.','New page each season',False),
 ('Website','cal','News and events page','A news, offers or events page customers can follow, with bank holidays and seasonal hours marked.','Updates automatically',False),
-('Bookings','sync','Live bookings or availability calendar','Your website calendar stays in sync with your booking or appointment system, so customers never pick a time or date that\u2019s already taken.','Every hour',False),
+('Bookings','sync','Live bookings and availability calendar','Your website calendar stays in sync with your booking or appointment system, so customers never pick a time or date that\u2019s already taken.','Every hour',False),
 ('Bookings','list','Listings and directories','Your Google Business Profile, directory and booking-site listings, photos and opening hours kept accurate and up to date.','Monthly check, plus on request',False),
-('Customers','inbox','Email inbox management','Business inbox sorted, replies to enquiries drafted for you to approve, and reminders for anything needing a follow-up.','Daily',False),
-('Social','camera','Instagram','DMs and comments checked, real enquiries flagged, spam ignored. Replies drafted for enquiries.','Daily checks',False),
-('Social','chat','Facebook','Messages and comments checked, enquiries flagged. Replies drafted for enquiries.','Daily checks',False),
-('Social','pen','Posts','A quarterly or six-monthly content calendar with posts, stories and reels written and scheduled across Instagram and Facebook, including offers, new stock and events.','Weekly or monthly',False),
-('Social','hash','X (Twitter)','Posts on local news and updates from your business, with mentions and replies checked.','Weekly',False),
-('Social','video','TikTok','Short videos of your work, products, premises and the area, planned and posted for you.','Weekly or monthly',False),
+('Customers','mail','Configure Business email','Your business email set up on your own domain, such as you@yourbusiness.ie, with mailboxes connected and records pointed the right way so messages arrive reliably.','One-off',False),
+('Customers','inbox','AI Email inbox management','Business inbox sorted, replies to enquiries drafted for you to approve, and reminders for anything needing a follow-up.','Daily',False),
+('Social','camera','Instagram','DMs and comments checked, real enquiries flagged, spam ignored. Replies drafted for enquiries.','Daily checks',False,'social-freq'),
+('Social','chat','Facebook','Messages and comments checked, enquiries flagged. Replies drafted for enquiries.','Daily checks',False,'social-freq'),
+('Social','pen','Posts','A quarterly or six-monthly content calendar with posts, stories and reels written and scheduled across Instagram and Facebook, including offers, new stock and events.','Weekly or monthly',False,'social-freq'),
+('Social','hash','X (Twitter)','Posts on local news and updates from your business, with mentions and replies checked.','Weekly',False,'social-freq'),
+('Social','video','TikTok','Short videos of your work, products, premises and the area, planned and posted for you.','Weekly or monthly',False,'social-freq'),
+('Social','link','Another','Another social network you use. Tell us the name, and we\u2019ll check messages and comments, flag enquiries, and draft replies.','As you choose',False,'social-other'),
 ('Reviews','search','Google reviews','New Google reviews flagged and replies drafted for your approval, so every customer gets an answer.','Daily checks',False),
-('Reviews','star','Other review sites','TripAdvisor, Facebook recommendations or the review sites your customers use: new reviews flagged and replies drafted for your approval.','Daily checks',False),
+('Reviews','star','Other review sites','TripAdvisor, Facebook recommendations or the review sites your customers use: new reviews flagged and replies drafted for your approval.','Daily checks',False,'review-freq'),
+('OTA (Online Travel Agency)','plane','Booking Holdings','Messages from Booking.com and the other Booking Holdings sites watched for you, with replies drafted when you want help answering them.','As you choose',False,'ota'),
+('OTA (Online Travel Agency)','plane','Expedia Group','Messages from Expedia, Hotels.com, Vrbo and the other Expedia Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,'ota'),
+('OTA (Online Travel Agency)','plane','Airbnb','Airbnb guest messages watched for you, with replies drafted when you want help answering them.','As you choose',False,'ota'),
+('OTA (Online Travel Agency)','plane','Trip.com Group','Messages from Trip.com and the other Trip.com Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,'ota'),
+('OTA (Online Travel Agency)','link','Other','Another booking or travel site you use. Tell us the name, and we\u2019ll watch messages and draft replies as you choose.','As you choose',False,'ota-other'),
 ('Admin','sun','WhatsApp morning summary','One message each morning to you or your staff: new enquiries, bookings or orders, emails needing a reply, reviews and anything to do with the website.','Every morning',False),
 ('Admin','bolt','Utility costs monitoring','Electricity, heating, water and broadband costs tracked against how busy you were and the same month last year, using smart-meter data where available. Unusual jumps, billing errors and cheaper tariffs flagged.','Monthly report',False),
 ('AI','spark','AI consultation','A consultation to talk through how AI could help your business: automating repetitive admin, answering enquiries, summaries and reports, bookings and ordering, drafting posts and emails, and linking up the tools you already use.','One-off, price on request',False),
+('SEO','search','SEO Site Management','Ongoing care of how your site appears in search: technical health, titles and content, and updates as your pages change, so customers can keep finding you on Google.','Monthly',False),
 ('Add-on','search','SEO and Google visibility','Page titles and descriptions written for the searches your customers make, your business details marked up for Google, and a short monthly report on how people find you.','Monthly',True),
-('Add-on','basket','Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, and approved by you on WhatsApp before they go.','Weekly',True),
+('Add-on','basket','AI Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, and approved by you on WhatsApp before they go.','Weekly',True),
 ]
-GROUPS=[('Website','globe'),('Bookings','cal'),('Customers','inbox'),('Social','chat'),('Reviews','star'),('Admin','chart'),('AI','spark'),('Add-on','basket')]
-NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one'}
+GROUPS=[('Website','globe'),('Bookings','cal'),('Customers','inbox'),('Social','chat'),('Reviews','star'),('OTA (Online Travel Agency)','plane'),('Admin','chart'),('AI','spark'),('SEO','search'),('Add-on','basket')]
+NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty'}
 N_CORE=sum(1 for s in SV if not s[5]); N_ADD=len(SV)-N_CORE
+def extras_html(i,kind):
+    if not kind: return ''
+    bits=[]
+    if kind in ('social-other','ota-other'):
+        lab='Name of the social network' if kind=='social-other' else 'Name of the site'
+        ph='e.g. LinkedIn' if kind=='social-other' else 'e.g. Vrbo'
+        bits.append(f'<label class="xlab" for="s{i}-name">{E(lab)}<input type="text" id="s{i}-name" name="s{i}-name" maxlength="80" placeholder="{E(ph)}" autocomplete="off" disabled></label>')
+    if kind in ('social-freq','social-other','review-freq'):
+        bits.append(f'<label class="xlab" for="s{i}-freq">Update frequency<select id="s{i}-freq" name="s{i}-freq" disabled><option value="Daily">Daily</option><option value="Weekly">Weekly</option><option value="Monthly">Monthly</option></select></label>')
+    if kind in ('ota','ota-other'):
+        bits.append(f'<div class="xopts" role="group" aria-label="OTA options"><label class="xchk"><input type="checkbox" id="s{i}-mon" name="s{i}-mon" disabled> Message monitoring</label><label class="xchk"><input type="checkbox" id="s{i}-replies" name="s{i}-replies" disabled> AI assisted replies</label></div>')
+        bits.append(f'<label class="xlab" for="s{i}-freq">Check frequency<select id="s{i}-freq" name="s{i}-freq" disabled><option value="5 min">5 min</option><option value="Hourly" selected>Hourly</option><option value="Daily">Daily</option></select></label>')
+    return f'<div class="svc-extras">{"".join(bits)}</div>'
+
 def svc_html():
     out=[]
     for g,gi in GROUPS:
         items=[(i,s) for i,s in enumerate(SV) if s[0]==g]
-        out.append(f'<div class="group rv"><h3>{I(gi)}{"Add-ons" if g=="Add-on" else "AI" if g=="AI" else E(g)}</h3>')
+        out.append(f'<div class="group rv"><h3>{I(gi)}{"Add-ons" if g=="Add-on" else "AI" if g=="AI" else "SEO" if g=="SEO" else E(g)}</h3>')
         for i,s in items:
             nm=E(s[2])
-            out.append(f'''<article class="svc" data-i="{i}" data-area="{E(g)}" data-name="{nm}">
+            kind=s[6] if len(s)>6 else ''
+            extra=f' data-extra="{E(kind)}"' if kind else ''
+            out.append(f"""<article class="svc" data-i="{i}" data-area="{E(g)}" data-name="{nm}"{extra}>
 <div><h4>{nm}{' <span class="addon">Add-on</span>' if s[5] else ''} <span class="freq">{I('clock')}{E(s[4])}</span></h4><p>{E(s[3])}</p></div>
 <fieldset class="seg"><legend>Include {nm}?</legend>
 <label class="y"><input type="radio" name="s{i}" value="yes"><span>Yes</span></label>
 <label class="m"><input type="radio" name="s{i}" value="maybe"><span>Maybe</span></label>
 <label class="n"><input type="radio" name="s{i}" value="no"><span>No</span></label>
-</fieldset></article>''')
+</fieldset>{extras_html(i,kind)}</article>""")
         out.append('</div>')
     return '\n'.join(out)
 
@@ -188,7 +213,7 @@ def phone(M,reply):
 # ---------------- packages ----------------
 PLANS=[('Essentials','For getting your site fixed, secure and looked after.',['Website hosting and updates','Domain and certificate care','Renewals and backups'],None,False),
 ('Growth','For being found by more customers.',['Google Business Profile and listings','Area pages with maps','News and events page'],'Everything in Essentials, plus',True),
-('Full service','For handing over the day-to-day screen work.',['Instagram and Facebook','Inbox management','WhatsApp morning summary'],'Everything in Growth, plus',False)]
+('Full service','For handing over the day-to-day screen work.',['Instagram and Facebook','AI Email inbox management','WhatsApp morning summary'],'Everything in Growth, plus',False)]
 def plans_html():
     o=[]
     for n,d,inc,inh,feat in PLANS:
@@ -196,7 +221,7 @@ def plans_html():
         o.append(f'<article class="plan rv{" feat" if feat else ""}"><h3>{E(n)}</h3><p class="muted">{E(d)}</p><div class="price" aria-label="Monthly fee: to be confirmed"><b>\u20ac[&nbsp;&nbsp;]</b><small>/ month ex VAT</small></div><span class="por">Price on request</span><ul>{li}</ul></article>')
     return '\n'.join(o)
 ADDONS_G=[('search','SEO and Google visibility','Your Google Business Profile kept up to date, page titles and descriptions written for the searches your customers make, your business details marked up for Google, and a short monthly report on how people find you.'),
-('basket','Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, approved on WhatsApp and sent to your suppliers. Adds to any package. <a href="business.html#ordering">See the hospitality example</a>.'),
+('basket','AI Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, approved on WhatsApp and sent to your suppliers. Adds to any package. <a href="business.html#ordering">See the hospitality example</a>.'),
 ('spark','AI consultation','A one-off consultation to talk through where AI could help your business, and where it wouldn\u2019t. <a href="#ai">What we cover</a>.','POR')]
 ADDONS_H=[('basket','Food ordering automation','Weekly food order built from bookings, updated as bookings change, approved on WhatsApp and sent to your suppliers. Adds to any package; needs access to your booking confirmation emails.'),
 ('glass','Drink ordering automation','Weekly drinks order built from bookings, events and the time of year, timed for each supplier\u2019s delivery day and approved on WhatsApp. Adds to any package.'),
