@@ -359,6 +359,7 @@ def head(title,desc,ogdesc):
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <meta name="theme-color" content="#0e1b26">
+<meta name="color-scheme" content="light">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{ogdesc}">
 <meta property="og:type" content="website">

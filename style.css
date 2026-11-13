@@ -1,5 +1,5 @@
 /* rehost.expert — self-contained styles (relative paths only) */
-:root{--ink:#0e1b26;--ink-2:#1d2f3d;--sea:#0f766e;--sea-2:#14b8a6;--deep:#0f5f73;--coral:#f26b4f;--coral-ink:#b93d1f;--sand:#f6f1e8;--paper:#fffdf9;--line:#e7e0d4;--muted:#55626d;--ok:#15803d;--warn:#b45309;--bad:#b91c1c;--r:18px;--shadow:0 20px 50px -24px rgba(14,27,38,.35);--max:1180px}
+:root{color-scheme:only light;--ink:#0e1b26;--ink-2:#1d2f3d;--sea:#0f766e;--sea-2:#14b8a6;--deep:#0f5f73;--coral:#f26b4f;--coral-ink:#b93d1f;--sand:#f6f1e8;--paper:#fffdf9;--line:#e7e0d4;--muted:#55626d;--ok:#15803d;--warn:#b45309;--bad:#b91c1c;--r:18px;--shadow:0 20px 50px -24px rgba(14,27,38,.35);--max:1180px}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
 body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--paper);line-height:1.6;font-size:17px}
 img,svg{max-width:100%;display:block}a{color:var(--sea)}
@@ -43,7 +43,17 @@ p{margin:0 0 1em}
 /* hero */
 .hero{position:relative;overflow:hidden;padding:clamp(40px,6vw,80px) 0 clamp(56px,7vw,100px);background:radial-gradient(1200px 600px at 85% -10%,rgba(20,184,166,.18),transparent 60%),radial-gradient(800px 500px at -10% 110%,rgba(242,107,79,.12),transparent 60%),var(--paper)}
 .hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,4vw,64px);align-items:center}
-.hero h1 .hl{background:linear-gradient(90deg,var(--sea),var(--deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+/* Solid teal first so the words stay visible if background-clip:text is
+   unsupported or mangled by a browser's auto-dark inversion. Gradient
+   is layered on via @supports. Drop-shadow adds contrast on cream and
+   a light halo if a browser still force-darkens the page.
+   The site is light-only (color-scheme:only light) so we do not switch
+   this to a bright teal under prefers-color-scheme:dark — that would
+   sit poorly on the cream background. */
+.hero h1 .hl{color:var(--sea);-webkit-text-fill-color:var(--sea);filter:drop-shadow(0 1px 1px rgba(14,27,38,.4)) drop-shadow(0 0 8px rgba(255,253,249,.9))}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+.hero h1 .hl{background:linear-gradient(90deg,var(--sea),#0a4f56);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+}
 .hero .lead{margin:18px 0 28px}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:12px}
 .trust{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:28px;color:var(--muted);font-size:.92rem}
