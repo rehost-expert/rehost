@@ -448,6 +448,7 @@ def cta(h2,p,pick_href):
 def foot(line,home):
     return f'''<footer class="foot"><div class="wrap">{BRAND(home)}<span>{line}</span><span class="foot-mail">{CONTACT}</span><span>\u00a9 2026 rehost.expert</span></div></footer>
 <script src="app.js?v={VER}"></script>
+<script data-goatcounter="https://rehostexpert.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
 '''
@@ -783,7 +784,9 @@ REDIRECT='''<!doctype html>
 <html lang="en-IE"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><title>Hospitality \u00b7 rehost.expert</title>
 <meta http-equiv="refresh" content="0; url=business.html#hospitality"><link rel="icon" href="favicon.svg?v=__VER__" type="image/svg+xml">
 <script>location.replace('business.html#hospitality'+(location.search||''))</script></head>
-<body><p>This page has moved to <a href="business.html#hospitality">Business examples: Hospitality</a>.</p></body></html>
+<body><p>This page has moved to <a href="business.html#hospitality">Business examples: Hospitality</a>.</p>
+<script data-goatcounter="https://rehostexpert.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body></html>
 '''
 for fn,pg in (('index.html',HOME),('business.html',BUS),('contact.html',CON),('hospitality.html',REDIRECT)):
     pg=pg.replace('__VER__',VER); open(OUTDIR+fn,'w').write(pg); print('wrote',fn,len(pg))
