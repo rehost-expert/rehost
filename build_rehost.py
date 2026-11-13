@@ -863,7 +863,7 @@ CON=head('Contact us \u00b7 rehost.expert \u00b7 Call Shane',
 <section class="hero hero--contact"><div class="wrap">
 <div class="rv">
 <span class="eyebrow">Contact us</span>
-<h1>Talk to <span class="hl">Shane</span>!</h1>
+<h1>Talk to <span class="hl">Shane</span>.</h1>
 <p class="lead">Ring for a chat about your website, or send us a message below and Shane will get back to you.</p>
 {call_block()}
 </div>
