@@ -90,7 +90,7 @@
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));
   if(!rows.length||!document.getElementById('send'))return;
-  var KEY='rehost-picks-v4',state={picks:{},extras:{}};
+  var KEY='rehost-picks-v5',state={picks:{},extras:{}};
   try{var raw=JSON.parse(localStorage.getItem(KEY)||'{}')||{};state.picks=raw.picks||{};state.extras=raw.extras||{};}catch(e){state={picks:{},extras:{}};}
   function extrasOf(r){return r.querySelectorAll('.svc-extras input, .svc-extras select');}
   function extrasOn(r,on){extrasOf(r).forEach(function(el){el.disabled=!on;});}
