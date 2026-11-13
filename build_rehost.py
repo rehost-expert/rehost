@@ -157,12 +157,12 @@ INFO_OTA_OTHER=('What is this other booking site?','Another booking or travel we
 INFO_REPLIES=('What are AI assisted replies?','When this is on, AI drafts a reply to the guest message for you to check and send. Nothing goes out until you approve it.')
 INFO_DRAFT=('What is an AI assistant for drafting replies?','When this is on, AI drafts replies to comments and messages on this network for you to check. Nothing is posted until you approve it.')
 _INFO_N=[0]
-def info_btn(title, text):
+def info_btn(title, text, extra_html=''):
     if not title or not text: return ''
     _INFO_N[0]+=1
     sid=f'info-pop-{_INFO_N[0]}'
     return (f'<button type="button" class="info-btn" aria-expanded="false" aria-controls="{sid}" aria-label="{E(title)}">{I("info")}</button>'
-            f'<span id="{sid}" class="info-pop" role="tooltip" hidden>{E(text)}</span>')
+            f'<span id="{sid}" class="info-pop" role="tooltip" hidden>{E(text)}{extra_html}</span>')
 def card_info(name, group, ex=None):
     if name=='Other' and (group.startswith('OTA') or (ex and ex.get('ota')) or group=='Bookings'):
         return info_btn(*INFO_OTA_OTHER)
@@ -178,10 +178,13 @@ def svc_html():
         scount=f'{nsvc} service' if nsvc==1 else f'{nsvc} services'
         open0=n==0
         gtip=INFO_GROUP.get(g)
-        ginfo=f'<div class="group-info">{info_btn(*gtip)}</div>' if gtip else ''
+        glink='<a class="info-pop-link" href="#what-is-ai">What is AI? Read our plain-English guide</a>' if g=='AI' else ''
+        ginfo=f'<div class="group-info">{info_btn(*gtip, glink)}</div>' if gtip else ''
         out.append(f'<div class="group rv{" is-open" if open0 else ""}">')
         out.append(f'<div class="group-head"><h3><button type="button" class="group-toggle" id="group-btn-{slug}" aria-expanded="{"true" if open0 else "false"}" aria-controls="group-panel-{slug}"><span class="group-ic">{I(gi)}</span><span class="group-title">{E(title)}</span><span class="group-meta"><span class="group-count">{E(scount)}</span><span class="group-picked" hidden></span></span>{I("chev","chev")}</button></h3>{ginfo}</div>')
         out.append(f'<div class="group-body" id="group-panel-{slug}" role="region" aria-labelledby="group-btn-{slug}" aria-hidden="{"false" if open0 else "true"}"><div class="group-panel">')
+        if g=='AI':
+            out.append('<p class="group-guide"><a href="#what-is-ai">What is AI? Read our plain-English guide</a></p>')
         for i,s in items:
             nm=E(s[2])
             ex=s[6] if len(s)>6 else None
@@ -589,7 +592,20 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 </div>
 </div></section>
 
-<section class="section section--sand" id="morning" aria-labelledby="mo-h"><div class="wrap morning">
+<section class="section section--sand" id="what-is-ai" aria-labelledby="wai-h"><div class="wrap">
+<div class="head rv"><span class="eyebrow">A plain-English guide</span><h2 id="wai-h">What is AI?</h2>
+<p class="lead">AI is software that can understand and write text, spot patterns in your data, and help with routine work \u2014 like drafting a reply or picking out what needs you today. It assists; you stay in control, and you approve anything that goes out.</p></div>
+<div class="wai-cards">
+<div class="wai-card rv">{I('chat')}<b>Drafting replies</b><p>When a guest or customer writes in \u2014 by email, on Instagram or Facebook, or through an OTA such as Booking.com, Airbnb or Expedia \u2014 AI can draft a reply for you to check. Nothing is sent until you approve it.</p></div>
+<div class="wai-card rv">{I('inbox')}<b>Inbox sorting</b><p>Your business inbox is sorted, real enquiries are flagged, and you get a reminder when something still needs a follow-up. You decide what goes back out.</p></div>
+<div class="wai-card rv">{I('basket')}<b>Supplier ordering</b><p>Regular supplier orders can be worked out automatically from your bookings, sales, local events and the season, then sent only after you approve them.</p></div>
+<div class="wai-card rv">{I('doc')}<b>Plans, quantities and quotes</b><p>For builders and trades, AI can help work out quantities from plans (like a QS), generate 3D drawings from plans, and prepare quotations \u2014 always for you to review.</p></div>
+<div class="wai-card rv">{I('sun')}<b>Morning summaries</b><p>Instead of checking every inbox and app, you can get one WhatsApp message each morning: new enquiries, bookings, reviews and anything on the website that needs you.</p></div>
+</div>
+<div class="wai-note rv">{I('shield')}<div><b>It doesn\u2019t send anything without your OK</b><p>AI is not a replacement for your judgment, and it is not left to talk to your customers on its own. Nothing is sent, posted or ordered until you say so. We only use it on the work you ask us to handle, and you stay in control of your accounts and your customers\u2019 data.</p></div></div>
+</div></section>
+
+<section class="section" id="morning" aria-labelledby="mo-h"><div class="wrap morning">
 <div class="rv"><span class="eyebrow">What your morning looks like</span><h2 id="mo-h">One message. Everything that needs you.</h2>
 <p class="lead">Each day starts with one WhatsApp message that tells you what needs your attention. Here\u2019s an example.</p>
 <div class="morning-points">

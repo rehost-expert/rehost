@@ -281,6 +281,12 @@
   });
   window.addEventListener('resize',function(){if(openBtn&&openPop)place(openBtn,openPop);});
   window.addEventListener('scroll',function(){if(openBtn&&openPop)place(openBtn,openPop);},true);
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href="#what-is-ai"]');
+    if(!a)return;
+    e.stopPropagation();
+    closeInfo();
+  },true);
 })();
 
 // nav: underline the active menu item (clicked, scrolled-to, or #hash on load) and set aria-current
