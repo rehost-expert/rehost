@@ -93,7 +93,7 @@ SV=[
 ('Social','video','TikTok','Short videos of your work, products, premises and the area, planned and posted for you.','Weekly or monthly',False,{'draft':True,'freq':('Update frequency',['Hourly','Weekly','Monthly'],'Weekly')}),
 ('Social','link','Another','Another social network you use. Tell us the name, and we\u2019ll check messages and comments, and flag enquiries.','As you choose',False,{'name':('Name of the social network','e.g. LinkedIn'),'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Reviews','search','Google reviews','New Google reviews flagged and replies drafted for your approval, so every customer gets an answer.','Daily checks',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
-('Reviews','star','Other review sites','TripAdvisor, Facebook recommendations or the review sites your customers use: new reviews flagged and replies drafted for your approval.','Daily checks',False,{'freq':('Update frequency',['Daily','Weekly','Monthly'],'Daily')}),
+('Reviews','star','Other review sites','TripAdvisor, Facebook recommendations or the review sites your customers use: new reviews flagged and replies drafted for your approval.','Daily checks',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('OTA (Online Travel Agency)','plane','Booking Holdings','Messages from Booking.com and the other Booking Holdings sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
 ('OTA (Online Travel Agency)','plane','Expedia Group','Messages from Expedia, Hotels.com, Vrbo and the other Expedia Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
 ('OTA (Online Travel Agency)','plane','Airbnb','Airbnb guest messages watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
@@ -101,12 +101,12 @@ SV=[
 ('OTA (Online Travel Agency)','link','Other','Another booking or travel site you use. Tell us the name, and we\u2019ll watch messages and draft replies as you choose.','As you choose',False,{'name':('Name of the site','e.g. Vrbo'),'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
 ('Admin','sun','WhatsApp morning summary','One message each morning to you or your staff: new enquiries, bookings or orders, emails needing a reply, reviews and anything to do with the website.','Every morning',False,{'freq':('Update frequency',['Every morning','Weekdays only','Weekly'],'Every morning')}),
 ('Admin','bolt','Utility costs monitoring','Electricity, heating, water and broadband costs tracked against how busy you were and the same month last year, using smart-meter data where available. Unusual jumps, billing errors and cheaper tariffs flagged.','Monthly report',False,{'freq':('Update frequency',['Daily','Weekly','Monthly','Quarterly'],'Monthly')}),
-('AI','spark','AI consultation','A consultation to talk through how AI could help your business: automating admin, answering enquiries, bookings and ordering, drafting posts and emails, working out quantities from plans for ordering materials (like a QS), generating 3D drawings from plans, and linking up the tools you already use.','One-off, price on request',False),
+('AI','spark','AI consultation','A consultation to talk through how AI could help your business: automating admin, answering enquiries, bookings and ordering, drafting posts and emails, a quotations helper to work out and prepare quotes, working out quantities from plans for ordering materials (like a QS), generating 3D drawings from plans, and linking up the tools you already use.','One-off, price on request',False),
 ('SEO','search','SEO Site Management','Ongoing care of how your site appears in search and on Google: technical health, titles and content, your Google Business Profile, and the keywords your customers search for, updated as your pages change.','Monthly',False),
 ('SEO','chart','Analytics','Website traffic monitored for you — visitors, top pages and where they come from — with a privacy-friendly tracker and a regular report.','Weekly report',False,{'freq':('Report frequency',['Daily','Weekly','Monthly'],'Weekly')}),
-('Add-on','basket','AI Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, and approved by you on WhatsApp before they go.','Weekly',True,{'freq':('Update frequency',['Weekly','Monthly'],'Weekly')}),
+('AI','basket','AI Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, and approved by you on WhatsApp before they go.','Weekly',True,{'freq':('Update frequency',['Weekly','Monthly'],'Weekly')}),
 ]
-GROUPS=[('Website','globe'),('Bookings','cal'),('Customers','inbox'),('Social','chat'),('Reviews','star'),('OTA (Online Travel Agency)','plane'),('Admin','chart'),('AI','spark'),('SEO','search'),('Add-on','basket')]
+GROUPS=[('Website','globe'),('Bookings','cal'),('Customers','inbox'),('Social','chat'),('Reviews','star'),('OTA (Online Travel Agency)','plane'),('Admin','chart'),('AI','spark'),('SEO','search')]
 NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty'}
 N_CORE=sum(1 for s in SV if not s[5]); N_ADD=len(SV)-N_CORE
 def extras_html(i,ex):
@@ -116,9 +116,9 @@ def extras_html(i,ex):
         lab,ph=ex['name']
         bits.append(f'<label class="xlab" for="s{i}-name">{E(lab)}<input type="text" id="s{i}-name" name="s{i}-name" maxlength="80" placeholder="{E(ph)}" autocomplete="off" disabled></label>')
     if ex.get('ota'):
-        bits.append(f'<div class="xopts" role="group" aria-label="OTA options"><label class="xchk"><input type="checkbox" id="s{i}-mon" name="s{i}-mon" disabled> Message monitoring</label><label class="xchk"><input type="checkbox" id="s{i}-replies" name="s{i}-replies" disabled> AI assisted replies</label></div>')
+        bits.append(f'<div class="xopts" role="group" aria-label="OTA options"><label class="xchk"><input type="checkbox" id="s{i}-mon" name="s{i}-mon" disabled> Message monitoring</label><div class="xchk-line"><label class="xchk"><input type="checkbox" id="s{i}-replies" name="s{i}-replies" disabled> AI assisted replies</label>{info_btn(*INFO_REPLIES)}</div></div>')
     if ex.get('draft'):
-        bits.append(f'<div class="xopts" role="group" aria-label="Reply options"><label class="xchk"><input type="checkbox" id="s{i}-draft" name="s{i}-draft" disabled> AI assistant for drafting replies</label></div>')
+        bits.append(f'<div class="xopts" role="group" aria-label="Reply options"><div class="xchk-line"><label class="xchk"><input type="checkbox" id="s{i}-draft" name="s{i}-draft" disabled> AI assistant for drafting replies</label>{info_btn(*INFO_DRAFT)}</div></div>')
     if ex.get('freq'):
         lab,opts,default=ex['freq']
         ops=''.join(f'<option value="{E(o)}"{(" selected" if o==default else "")}>{E(o)}</option>' for o in opts)
@@ -133,6 +133,41 @@ def group_slug(g):
     s=''.join(c.lower() if c.isalnum() else '-' for c in group_label(g))
     while '--' in s: s=s.replace('--','-')
     return s.strip('-')
+
+# Short plain-English explanations for jargon in the picker (info buttons).
+INFO_GROUP={
+    'OTA (Online Travel Agency)':('What is an OTA?','OTA means Online Travel Agency: websites like Booking.com, Expedia and Airbnb where guests book your rooms.'),
+    'AI':('What does AI mean?','AI is software that can read, write and summarise like a person. We use it here to draft replies, sort emails and help with planning — and you always approve before anything goes out.'),
+    'SEO':('What does SEO mean?','SEO means helping your site appear higher on Google, so customers can find you when they search.'),
+}
+INFO_CARD={
+    'Domain and certificate care':('What is domain and certificate care?','Your domain is your website address, such as yourbusiness.ie. The certificate is the padlock in the browser that keeps the connection private (https). We keep both renewed and checked so your site stays secure and in your name.'),
+    'Listings and directories':('What are listings and directories?','Listings are your public profiles on Google, directories and booking sites — your name, photos, opening hours and how to find you — kept accurate so customers see the right information.'),
+    'AI Email inbox management':('What is AI Email inbox management?','AI reads new emails in your business inbox, drafts replies for you to approve, and reminds you about anything that still needs a follow-up. Nothing is sent until you say so.'),
+    'AI consultation':('What is an AI consultation?','A one-off conversation about where AI could help your business — and where it wouldn’t. That includes a quotations helper to work out and prepare quotes, working out quantities from plans (like a QS), and 3D drawings from plans.'),
+    'AI Supplier ordering automation':('What is AI Supplier ordering automation?','AI works out regular supplier orders from your bookings or sales, updates them as things change, and sends them only after you approve on WhatsApp.'),
+    'SEO Site Management':('What is SEO Site Management?','Ongoing care of how your site appears in search and on Google: technical health, titles and content, your Google Business Profile, and the keywords your customers search for, updated as your pages change.'),
+    'Analytics':('What is Analytics?','A regular look at how many people visit your website, which pages they view and how they found you — using a privacy-friendly tracker, with a report at the frequency you choose.'),
+    'Booking Holdings':('What is Booking Holdings?','Booking Holdings is the company behind Booking.com and related sites. This service watches guest messages from those sites and can draft replies for you to approve.'),
+    'Expedia Group':('What is Expedia Group?','Expedia Group includes Expedia, Hotels.com, Vrbo and related sites. This service watches guest messages from those sites and can draft replies for you to approve.'),
+    'Airbnb':('What is Airbnb?','Airbnb is a site where guests book stays in homes, B&Bs and hotels. This service watches Airbnb guest messages and can draft replies for you to approve.'),
+    'Trip.com Group':('What is Trip.com Group?','Trip.com Group includes Trip.com and related travel sites. This service watches guest messages from those sites and can draft replies for you to approve.'),
+}
+INFO_OTA_OTHER=('What is this other booking site?','Another booking or travel website you use, besides the main OTAs such as Booking.com, Expedia and Airbnb. Tell us the name and we’ll watch messages and draft replies as you choose.')
+INFO_REPLIES=('What are AI assisted replies?','When this is on, AI drafts a reply to the guest message for you to check and send. Nothing goes out until you approve it.')
+INFO_DRAFT=('What is an AI assistant for drafting replies?','When this is on, AI drafts replies to comments and messages on this network for you to check. Nothing is posted until you approve it.')
+_INFO_N=[0]
+def info_btn(title, text):
+    if not title or not text: return ''
+    _INFO_N[0]+=1
+    sid=f'info-pop-{_INFO_N[0]}'
+    return (f'<button type="button" class="info-btn" aria-expanded="false" aria-controls="{sid}" aria-label="{E(title)}">{I("info")}</button>'
+            f'<span id="{sid}" class="info-pop" role="tooltip" hidden>{E(text)}</span>')
+def card_info(name, group):
+    if name=='Other' and group.startswith('OTA'):
+        return info_btn(*INFO_OTA_OTHER)
+    tip=INFO_CARD.get(name)
+    return info_btn(*tip) if tip else ''
 def svc_html():
     out=[]
     for n,(g,gi) in enumerate(GROUPS):
@@ -142,15 +177,17 @@ def svc_html():
         nsvc=len(items)
         scount=f'{nsvc} service' if nsvc==1 else f'{nsvc} services'
         open0=n==0
+        gtip=INFO_GROUP.get(g)
+        ginfo=f'<div class="group-info">{info_btn(*gtip)}</div>' if gtip else ''
         out.append(f'<div class="group rv{" is-open" if open0 else ""}">')
-        out.append(f'<h3><button type="button" class="group-toggle" id="group-btn-{slug}" aria-expanded="{"true" if open0 else "false"}" aria-controls="group-panel-{slug}"><span class="group-ic">{I(gi)}</span><span class="group-title">{E(title)}</span><span class="group-meta"><span class="group-count">{E(scount)}</span><span class="group-picked" hidden></span></span>{I("chev","chev")}</button></h3>')
+        out.append(f'<div class="group-head"><h3><button type="button" class="group-toggle" id="group-btn-{slug}" aria-expanded="{"true" if open0 else "false"}" aria-controls="group-panel-{slug}"><span class="group-ic">{I(gi)}</span><span class="group-title">{E(title)}</span><span class="group-meta"><span class="group-count">{E(scount)}</span><span class="group-picked" hidden></span></span>{I("chev","chev")}</button></h3>{ginfo}</div>')
         out.append(f'<div class="group-body" id="group-panel-{slug}" role="region" aria-labelledby="group-btn-{slug}" aria-hidden="{"false" if open0 else "true"}"><div class="group-panel">')
         for i,s in items:
             nm=E(s[2])
             ex=s[6] if len(s)>6 else None
             extra=' data-extra="1"' if ex else ''
             out.append(f"""<article class="svc" data-i="{i}" data-area="{E(g)}" data-name="{nm}"{extra}>
-<div><h4>{nm}{' <span class="addon">Add-on</span>' if s[5] else ''}</h4><p>{E(s[3])}</p></div>
+<div><h4><span class="svc-name">{nm}</span>{card_info(s[2],g)}{' <span class="addon">Add-on</span>' if s[5] else ''}</h4><p>{E(s[3])}</p></div>
 <fieldset class="seg"><legend>Include {nm}?</legend>
 <label class="y"><input type="radio" name="s{i}" value="yes"><span>Yes</span></label>
 <label class="m"><input type="radio" name="s{i}" value="maybe"><span>Maybe</span></label>
@@ -277,6 +314,7 @@ AI_EX=[('sync','Repetitive processes and admin','The jobs you do the same way ev
 ('chat','Customer enquiries and messages','Drafting replies to common questions from email, your website, Facebook and Instagram, for you to check before they go.'),
 ('sun','Morning summaries and reports','One short message or report pulling together what happened yesterday and what needs you today.'),
 ('cal','Bookings and ordering','Keeping calendars in step, and working out supplier orders from your bookings or sales, with you approving each one.'),
+('doc','Quotations and quotes','A quotations helper to work out and prepare quotes for customers, from your prices, plans or past jobs, for you to check before they go.'),
 ('pen','Social posts and emails','First drafts of posts, newsletters and emails in your own tone, ready for you to edit.'),
 ('link','Linking up your tools','Getting the tools you already use, such as your inbox, calendar, till, booking system and spreadsheets, to pass information to each other.')]
 ai_ex_html='\n'.join(f'<div class="ai-ex rv">{I(i)}<b>{E(t)}</b><p>{E(d)}</p></div>' for i,t,d in AI_EX)

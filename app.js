@@ -215,6 +215,74 @@
   if(/[?&]pick=ai\b/.test(location.search))setTimeout(pickAI,300);
 })();
 
+// Info buttons: click/tap toggles a short explanation popover. Esc / outside click / focus leaving closes it.
+(function(){
+  var btns=[].slice.call(document.querySelectorAll('.info-btn'));
+  if(!btns.length)return;
+  var layer=document.createElement('div');
+  layer.id='info-layer';
+  document.body.appendChild(layer);
+  var openBtn=null,openPop=null;
+  function place(btn,pop){
+    pop.hidden=false;
+    var r=btn.getBoundingClientRect(),pad=8,vw=window.innerWidth,vh=window.innerHeight;
+    var w=Math.min(320,vw-pad*2);
+    pop.style.width=w+'px';
+    var ph=pop.offsetHeight;
+    var left=r.left+r.width/2-w/2,minL=pad,maxL=vw-w-pad;
+    var col=document.getElementById('svc-list');
+    if(col){var cr=col.getBoundingClientRect();if(cr.width>=w+pad*2){minL=Math.max(minL,cr.left+pad);maxL=Math.min(maxL,cr.right-w-pad);}}
+    left=Math.min(Math.max(minL,left),maxL);
+    var top=r.bottom+pad;
+    if(top+ph>vh-pad && r.top-pad-ph>=pad)top=r.top-pad-ph;
+    else if(top+ph>vh-pad)top=Math.max(pad,vh-ph-pad);
+    pop.style.left=left+'px';
+    pop.style.top=top+'px';
+  }
+  function closeInfo(){
+    if(!openBtn)return;
+    openBtn.setAttribute('aria-expanded','false');
+    openBtn.removeAttribute('aria-describedby');
+    if(openPop)openPop.hidden=true;
+    openBtn=null;openPop=null;
+  }
+  function openInfo(btn){
+    var id=btn.getAttribute('aria-controls'),pop=id&&document.getElementById(id);
+    if(!pop)return;
+    if(openBtn===btn){closeInfo();return;}
+    closeInfo();
+    layer.appendChild(pop);
+    btn.setAttribute('aria-expanded','true');
+    btn.setAttribute('aria-describedby',id);
+    openBtn=btn;openPop=pop;
+    place(btn,pop);
+  }
+  btns.forEach(function(btn){
+    var pop=document.getElementById(btn.getAttribute('aria-controls'));
+    if(pop)layer.appendChild(pop);
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      openInfo(btn);
+    });
+  });
+  document.addEventListener('click',function(e){
+    if(!openBtn)return;
+    if(openBtn.contains(e.target)||(openPop&&openPop.contains(e.target)))return;
+    closeInfo();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&openBtn){var b=openBtn;closeInfo();b.focus();}
+  });
+  document.addEventListener('focusin',function(e){
+    if(!openBtn)return;
+    if(openBtn===e.target||openBtn.contains(e.target)||(openPop&&openPop.contains(e.target)))return;
+    closeInfo();
+  });
+  window.addEventListener('resize',function(){if(openBtn&&openPop)place(openBtn,openPop);});
+  window.addEventListener('scroll',function(){if(openBtn&&openPop)place(openBtn,openPop);},true);
+})();
+
 // nav: underline the active menu item (clicked, scrolled-to, or #hash on load) and set aria-current
 (function(){
   var links=[].slice.call(document.querySelectorAll('.menu a[href]')),items=[];
