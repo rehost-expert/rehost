@@ -29,6 +29,7 @@ ICONS={
 'euro':'<path d="M17 6a7 7 0 1 0 0 12"/><path d="M4 10h9M4 14h9"/>',
 'doc':'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
 'arrow':'<path d="M5 12h14M13 6l6 6-6 6"/>',
+'chev':'<path d="m6 9 6 6 6-6"/>',
 'search':'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
 'copy':'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
 'mail':'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
@@ -126,11 +127,24 @@ def extras_html(i,ex):
             bits.append(f'<label class="xlab freq-custom" for="s{i}-custom" hidden>Tell us how often<input type="text" id="s{i}-custom" name="s{i}-custom" maxlength="80" placeholder="e.g. twice a day, weekdays only" autocomplete="off" disabled></label>')
     return f'<div class="svc-extras">{"".join(bits)}</div>'
 
+def group_label(g):
+    return "Add-ons" if g=="Add-on" else "AI" if g=="AI" else "SEO" if g=="SEO" else g
+def group_slug(g):
+    s=''.join(c.lower() if c.isalnum() else '-' for c in group_label(g))
+    while '--' in s: s=s.replace('--','-')
+    return s.strip('-')
 def svc_html():
     out=[]
-    for g,gi in GROUPS:
+    for n,(g,gi) in enumerate(GROUPS):
         items=[(i,s) for i,s in enumerate(SV) if s[0]==g]
-        out.append(f'<div class="group rv"><h3>{I(gi)}{"Add-ons" if g=="Add-on" else "AI" if g=="AI" else "SEO" if g=="SEO" else E(g)}</h3>')
+        title=group_label(g)
+        slug=group_slug(g)
+        nsvc=len(items)
+        scount=f'{nsvc} service' if nsvc==1 else f'{nsvc} services'
+        open0=n==0
+        out.append(f'<div class="group rv{" is-open" if open0 else ""}">')
+        out.append(f'<h3><button type="button" class="group-toggle" id="group-btn-{slug}" aria-expanded="{"true" if open0 else "false"}" aria-controls="group-panel-{slug}"><span class="group-ic">{I(gi)}</span><span class="group-title">{E(title)}</span><span class="group-meta"><span class="group-count">{E(scount)}</span><span class="group-picked" hidden></span></span>{I("chev","chev")}</button></h3>')
+        out.append(f'<div class="group-body" id="group-panel-{slug}" role="region" aria-labelledby="group-btn-{slug}" aria-hidden="{"false" if open0 else "true"}"><div class="group-panel">')
         for i,s in items:
             nm=E(s[2])
             ex=s[6] if len(s)>6 else None
@@ -142,7 +156,7 @@ def svc_html():
 <label class="m"><input type="radio" name="s{i}" value="maybe"><span>Maybe</span></label>
 <label class="n"><input type="radio" name="s{i}" value="no"><span>No</span></label>
 </fieldset>{extras_html(i,ex)}</article>""")
-        out.append('</div>')
+        out.append('</div></div></div>')
     return '\n'.join(out)
 
 # ---------------- browser "screens" for problems ----------------

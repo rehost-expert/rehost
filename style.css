@@ -105,9 +105,25 @@ p{margin:0 0 1em}
 /* picker */
 .picker{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start}
 @media (max-width:1040px){.picker{grid-template-columns:1fr}}
-.group{margin-bottom:26px}
-.group h3{display:flex;align-items:center;gap:10px;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
-.group h3 svg{width:28px;height:28px;padding:5px;border-radius:9px;background:var(--ink);color:#fff}
+.group{margin-bottom:12px;border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}
+.group h3{margin:0;font-size:1rem}
+.group-toggle{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;width:100%;margin:0;padding:14px 16px;border:0;background:transparent;color:var(--muted);font:inherit;font-size:1rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:left;cursor:pointer;transition:background .2s}
+.group-toggle:hover{background:var(--sand);color:var(--ink)}
+.group-toggle:focus-visible{outline:3px solid var(--coral);outline-offset:-3px}
+.group-toggle .group-ic{display:flex;flex:none}
+.group-toggle .group-ic svg{width:28px;height:28px;padding:5px;border-radius:9px;background:var(--ink);color:#fff}
+.group-title{flex:1 1 auto;min-width:8ch}
+.group-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-left:auto;font-size:.78rem;font-weight:700;letter-spacing:0;text-transform:none;color:var(--muted)}
+.group-picked{background:#e8f2f5;color:var(--deep);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.group-toggle svg.chev{width:20px;height:20px;padding:0;margin:0;background:none;color:var(--deep);flex:none;transition:transform .28s ease}
+.group.is-open .group-toggle{border-bottom:1px solid var(--line)}
+.group.is-open svg.chev{transform:rotate(-180deg)}
+.group-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.2,.7,.2,1)}
+.group.is-open .group-body{grid-template-rows:1fr}
+.group-panel{overflow:hidden;min-height:0;display:flex;flex-direction:column;gap:10px}
+.group.is-open .group-panel{padding:12px}
+.group .svc{margin-bottom:0}
+@media (prefers-reduced-motion: reduce){.group-body,.group-toggle svg.chev{transition:none}}
 .svc{display:grid;grid-template-columns:1fr auto;gap:12px 20px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:10px;transition:border-color .2s,box-shadow .2s,background .2s}
 .svc[data-v=yes]{border-color:rgba(15,118,110,.55);box-shadow:0 0 0 3px rgba(20,184,166,.12)}
 .svc[data-v=maybe]{border-color:rgba(180,83,9,.45);background:#fffaf2}

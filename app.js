@@ -157,7 +157,30 @@
     $('chosen').innerHTML=h||'<p class="empty">Your Yes and Maybe picks will appear here.</p>';
     var s=suggest(y),sg=$('suggest');
     if(s){sg.hidden=false;sg.innerHTML=(s.pkg?'Closest package: <b>'+s.pkg+'</b>'+(s.add.length?' + '+s.add.length+' extra'+(s.add.length>1?'s':''):''):'<b>'+esc(s.add.join(', '))+'</b> on its own, or with any package')+'. <a href="#packages" style="color:#5eead4">See packages</a>';}else sg.hidden=true;
+    updateGroupPicked();
   }
+  function updateGroupPicked(){
+    document.querySelectorAll('#svc-list .group').forEach(function(g){
+      var el=g.querySelector('.group-picked');if(!el)return;
+      var n=[].slice.call(g.querySelectorAll('.svc')).filter(function(r){return isPicked(state.picks[r.dataset.i]);}).length;
+      if(n){el.hidden=false;el.textContent=n+' picked';}else{el.hidden=true;el.textContent='';}
+    });
+  }
+  function setGroupOpen(g,open){
+    g.classList.toggle('is-open',!!open);
+    var btn=g.querySelector('.group-toggle'),panel=g.querySelector('.group-body');
+    if(btn)btn.setAttribute('aria-expanded',open?'true':'false');
+    if(panel)panel.setAttribute('aria-hidden',open?'false':'true');
+  }
+  (function(){
+    var groups=[].slice.call(document.querySelectorAll('#svc-list .group'));
+    var mobile=window.matchMedia('(max-width:640px)').matches;
+    groups.forEach(function(g,i){setGroupOpen(g, !mobile && i===0);});
+    groups.forEach(function(g){
+      var btn=g.querySelector('.group-toggle');if(!btn)return;
+      btn.addEventListener('click',function(){setGroupOpen(g,!g.classList.contains('is-open'));});
+    });
+  })();
   function selectionText(){
     var L=['Services selection:',''];
     ['yes','maybe','no'].forEach(function(v){var list=pick(v);if(!list.length)return;L.push((v==='yes'?'Yes':v==='maybe'?'Maybe':'No')+' ('+list.length+')');list.forEach(function(r){L.push('- '+label(r)+' ['+r.dataset.area+']');});L.push('');});
@@ -183,6 +206,7 @@
   // "Book an AI consultation": mark AI consultation as Yes and jump to the selection panel
   function pickAI(){var r=rows.filter(function(x){return nm(x)==='AI consultation';})[0];if(!r)return;
     state.picks[r.dataset.i]='yes';r.dataset.v='yes';var inp=r.querySelector('input[value=yes]');if(inp)inp.checked=true;save();render();
+    var g=r.closest('.group');if(g)setGroupOpen(g,true);
     var p=document.querySelector('aside.summary');if(p)p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
     var first=CKEYS.map(function(k){return $('f-'+k);}).filter(function(x){return !x.value.trim();})[0];if(first)setTimeout(function(){first.focus({preventScroll:true});},400);}
   document.querySelectorAll('[data-pick-ai]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();pickAI();});});
