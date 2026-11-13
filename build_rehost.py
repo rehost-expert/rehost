@@ -84,8 +84,8 @@ SV=[
 ('Website','cal','News and events page','A news, offers or events page customers can follow, with bank holidays and seasonal hours marked.','Updates automatically',False,{'freq':('Update frequency',['Daily','Weekly','Monthly','Quarterly'],'Monthly')}),
 ('Bookings','sync','Live bookings and availability calendar','Your website calendar stays in sync with your booking system and your OTAs (Booking.com, Airbnb, Expedia and others), so availability stays in step and you avoid double bookings.','Every hour',False),
 ('Bookings','list','Listings and directories','Your Google Business Profile, directory and booking-site listings, photos and opening hours kept accurate and up to date.','Monthly check, plus on request',False,{'freq':('Check frequency',['Daily','Weekly','Monthly','On request'],'Monthly')}),
-('Customers','mail','Configure Business email','Cloud-based business email on your own domain, such as you@yourbusiness.ie, that you can access anywhere, on any device.','One-off',False),
-('Customers','inbox','AI Email inbox management','Business inbox sorted, replies to enquiries drafted for you to approve, and reminders for anything needing a follow-up.','Daily',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly','Custom'],'Daily'),'custom':True}),
+('Admin','mail','Configure Business email','Cloud-based business email on your own domain, such as you@yourbusiness.ie, that you can access anywhere, on any device.','One-off',False),
+('Admin','inbox','AI Email inbox management','Business inbox sorted, replies to enquiries drafted for you to approve, and reminders for anything needing a follow-up.','Daily',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly','Custom'],'Daily'),'custom':True}),
 ('Social','camera','Instagram','DMs and comments checked, real enquiries flagged, spam ignored.','Daily checks',False,{'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Social','chat','Facebook','Messages and comments checked, enquiries flagged.','Daily checks',False,{'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Social','pen','Posts','A content calendar with posts, stories and reels written and scheduled across Instagram and Facebook, including offers, new stock and events.','Weekly or monthly',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Quarterly','Six-monthly'],'Weekly')}),
@@ -94,19 +94,19 @@ SV=[
 ('Social','link','Another','Another social network you use. Tell us the name, and we\u2019ll check messages and comments, and flag enquiries.','As you choose',False,{'name':('Name of the social network','e.g. LinkedIn'),'draft':True,'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Reviews','search','Google reviews','New Google reviews flagged and replies drafted for your approval, so every customer gets an answer.','Daily checks',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
 ('Reviews','star','Other review sites','TripAdvisor, Facebook recommendations or the review sites your customers use: new reviews flagged and replies drafted for your approval.','Daily checks',False,{'freq':('Update frequency',['Hourly','Daily','Weekly','Monthly'],'Daily')}),
-('OTA (Online Travel Agency)','plane','Booking Holdings','Messages from Booking.com and the other Booking Holdings sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
-('OTA (Online Travel Agency)','plane','Expedia Group','Messages from Expedia, Hotels.com, Vrbo and the other Expedia Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
-('OTA (Online Travel Agency)','plane','Airbnb','Airbnb guest messages watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
-('OTA (Online Travel Agency)','plane','Trip.com Group','Messages from Trip.com and the other Trip.com Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
-('OTA (Online Travel Agency)','link','Other','Another booking or travel site you use. Tell us the name, and we\u2019ll watch messages and draft replies as you choose.','As you choose',False,{'name':('Name of the site','e.g. Vrbo'),'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
+('Bookings','plane','Booking Holdings','Messages from Booking.com and the other Booking Holdings sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
+('Bookings','plane','Expedia Group','Messages from Expedia, Hotels.com, Vrbo and the other Expedia Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
+('Bookings','plane','Airbnb','Airbnb guest messages watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
+('Bookings','plane','Trip.com Group','Messages from Trip.com and the other Trip.com Group sites watched for you, with replies drafted when you want help answering them.','As you choose',False,{'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
+('Bookings','plane','Other','Another booking or travel site you use. Tell us the name, and we\u2019ll watch messages and draft replies as you choose.','As you choose',False,{'name':('Name of the site','e.g. Vrbo'),'ota':True,'freq':('Check frequency',['5 min','Hourly','Daily'],'Hourly')}),
 ('Admin','sun','WhatsApp morning summary','One message each morning to you or your staff: new enquiries, bookings or orders, emails needing a reply, reviews and anything to do with the website.','Every morning',False,{'freq':('Update frequency',['Every morning','Weekdays only','Weekly'],'Every morning')}),
 ('Admin','bolt','Utility costs monitoring','Electricity, heating, water and broadband costs tracked against how busy you were and the same month last year, using smart-meter data where available. Unusual jumps, billing errors and cheaper tariffs flagged.','Monthly report',False,{'freq':('Update frequency',['Daily','Weekly','Monthly','Quarterly'],'Monthly')}),
 ('AI','spark','AI consultation','A consultation to talk through how AI could help your business: automating admin, answering enquiries, bookings and ordering, drafting posts and emails, a quotations helper to work out and prepare quotes, working out quantities from plans for ordering materials (like a QS), generating 3D drawings from plans, and linking up the tools you already use.','One-off, price on request',False),
 ('SEO','search','SEO Site Management','Ongoing care of how your site appears in search and on Google: technical health, titles and content, your Google Business Profile, and the keywords your customers search for, updated as your pages change.','Monthly',False),
-('SEO','chart','Analytics','Website traffic monitored for you — visitors, top pages and where they come from — with a privacy-friendly tracker and a regular report.','Weekly report',False,{'freq':('Report frequency',['Daily','Weekly','Monthly'],'Weekly')}),
+('Admin','chart','Analytics','Website traffic monitored for you — visitors, top pages and where they come from — with a privacy-friendly tracker and a regular report.','Weekly report',False,{'freq':('Report frequency',['Daily','Weekly','Monthly'],'Weekly')}),
 ('AI','basket','AI Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, and approved by you on WhatsApp before they go.','Weekly',True,{'freq':('Update frequency',['Weekly','Monthly'],'Weekly')}),
 ]
-GROUPS=[('Website','globe'),('Bookings','cal'),('Customers','inbox'),('Social','chat'),('Reviews','star'),('OTA (Online Travel Agency)','plane'),('Admin','chart'),('AI','spark'),('SEO','search')]
+GROUPS=[('Website','globe'),('Bookings','cal'),('Social','chat'),('Reviews','star'),('Admin','chart'),('AI','spark'),('SEO','search')]
 NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty'}
 N_CORE=sum(1 for s in SV if not s[5]); N_ADD=len(SV)-N_CORE
 def extras_html(i,ex):
@@ -136,7 +136,7 @@ def group_slug(g):
 
 # Short plain-English explanations for jargon in the picker (info buttons).
 INFO_GROUP={
-    'OTA (Online Travel Agency)':('What is an OTA?','OTA means Online Travel Agency: websites like Booking.com, Expedia and Airbnb where guests book your rooms.'),
+    'Bookings':('What is an OTA?','OTA means Online Travel Agency: websites like Booking.com, Expedia and Airbnb where guests book your rooms.'),
     'AI':('What does AI mean?','AI is software that can read, write and summarise like a person. We use it here to draft replies, sort emails and help with planning — and you always approve before anything goes out.'),
     'SEO':('What does SEO mean?','SEO means helping your site appear higher on Google, so customers can find you when they search.'),
 }
@@ -163,8 +163,8 @@ def info_btn(title, text):
     sid=f'info-pop-{_INFO_N[0]}'
     return (f'<button type="button" class="info-btn" aria-expanded="false" aria-controls="{sid}" aria-label="{E(title)}">{I("info")}</button>'
             f'<span id="{sid}" class="info-pop" role="tooltip" hidden>{E(text)}</span>')
-def card_info(name, group):
-    if name=='Other' and group.startswith('OTA'):
+def card_info(name, group, ex=None):
+    if name=='Other' and (group.startswith('OTA') or (ex and ex.get('ota')) or group=='Bookings'):
         return info_btn(*INFO_OTA_OTHER)
     tip=INFO_CARD.get(name)
     return info_btn(*tip) if tip else ''
@@ -186,8 +186,10 @@ def svc_html():
             nm=E(s[2])
             ex=s[6] if len(s)>6 else None
             extra=' data-extra="1"' if ex else ''
-            out.append(f"""<article class="svc" data-i="{i}" data-area="{E(g)}" data-name="{nm}"{extra}>
-<div><h4><span class="svc-name">{nm}</span>{card_info(s[2],g)}{' <span class="addon">Add-on</span>' if s[5] else ''}</h4><p>{E(s[3])}</p></div>
+            ota=bool(ex and ex.get('ota'))
+            ic=f'<span class="svc-ic" aria-hidden="true">{I("plane")}</span>' if ota else ''
+            out.append(f"""<article class="svc{" ota" if ota else ""}" data-i="{i}" data-area="{E(g)}" data-name="{nm}"{extra}>
+<div><h4>{ic}<span class="svc-name">{nm}</span>{card_info(s[2],g,ex)}{' <span class="addon">Add-on</span>' if s[5] else ''}</h4><p>{E(s[3])}</p></div>
 <fieldset class="seg"><legend>Include {nm}?</legend>
 <label class="y"><input type="radio" name="s{i}" value="yes"><span>Yes</span></label>
 <label class="m"><input type="radio" name="s{i}" value="maybe"><span>Maybe</span></label>
