@@ -58,6 +58,7 @@ ICONS.update({
 'calc':'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
 'flag':'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
 'tag':'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/>',
+'gift':'<path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
 'phone':'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
 'link':'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
 'plane':'<path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9L2 14v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>',
@@ -108,6 +109,7 @@ SV=[
 ('Bookings','shop','Google Business Profile','Manage your business profile and add info, pictures, website and booking links.','On request',False),
 ('Bookings','cal','Google Bookings','Take bookings directly via Google Search and Google Maps.','On request',False),
 ('Admin','server','Uptime monitoring and alerts','We watch your website around the clock and alert you straight away if it goes down, then get it back up.','Checked every 5 minutes',False,{'freq':('Check frequency',['5 min','Hourly'],'5 min')}),
+('Bookings','gift','Gift Vouchers','Add a \u201cGift Vouchers\u201d button to your website so customers can buy vouchers online, with payment going directly to your own account.','On request',False),
 ]
 GROUPS=[('Website','globe'),('Bookings','cal'),('Social','chat'),('Reviews','star'),('Admin','chart'),('AI','spark'),('SEO','search')]
 NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty',31:'Thirty-one',32:'Thirty-two'}
