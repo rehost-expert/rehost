@@ -105,9 +105,12 @@ SV=[
 ('SEO','search','SEO Site Management','Ongoing care of how your site appears in search and on Google: technical health, titles and content, your Google Business Profile, and the keywords your customers search for, updated as your pages change.','Monthly',False),
 ('Admin','chart','Analytics','Website traffic monitored for you — visitors, top pages and where they come from — with a privacy-friendly tracker and a regular report.','Weekly report',False,{'freq':('Report frequency',['Daily','Weekly','Monthly'],'Weekly')}),
 ('AI','basket','AI Supplier ordering automation','Regular supplier orders worked out for you automatically, based on your bookings, sales, local events and the season.','Weekly',True,{'freq':('Update frequency',['Weekly','Monthly'],'Weekly')}),
+('Bookings','shop','Google Business Profile','Manage your business profile and add info, pictures, website and booking links.','On request',False),
+('Bookings','cal','Google Bookings','Take bookings directly via Google Search and Google Maps.','On request',False),
+('Admin','server','Uptime monitoring and alerts','We watch your website around the clock and alert you straight away if it goes down, then get it back up.','Checked every 5 minutes',False,{'freq':('Check frequency',['5 min','Hourly'],'5 min')}),
 ]
 GROUPS=[('Website','globe'),('Bookings','cal'),('Social','chat'),('Reviews','star'),('Admin','chart'),('AI','spark'),('SEO','search')]
-NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty'}
+NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty',31:'Thirty-one',32:'Thirty-two'}
 N_CORE=sum(1 for s in SV if not s[5]); N_ADD=len(SV)-N_CORE
 def extras_html(i,ex):
     if not ex: return ''
@@ -148,6 +151,9 @@ INFO_CARD={
     'AI Supplier ordering automation':('What is AI Supplier ordering automation?','AI works out regular supplier orders from your bookings or sales, updates them as things change, and sends them only after you approve on WhatsApp.'),
     'SEO Site Management':('What is SEO Site Management?','Ongoing care of how your site appears in search and on Google: technical health, titles and content, your Google Business Profile, and the keywords your customers search for, updated as your pages change.'),
     'Analytics':('What is Analytics?','A regular look at how many people visit your website, which pages they view and how they found you — using a privacy-friendly tracker, with a report at the frequency you choose.'),
+    'Google Business Profile':('What is a Google Business Profile?','Your Google Business Profile is the listing that shows when people find you on Google Search and Google Maps — your name, photos, opening hours, website and how to book.'),
+    'Google Bookings':('What is Google Bookings?','Google Bookings lets customers reserve with you directly from Google Search and Google Maps, without leaving Google.'),
+    'Uptime monitoring and alerts':('What is uptime monitoring?','Uptime means your website is available when customers visit. We check it continuously and alert you at once if it goes down, then work to get it back up.'),
     'Booking Holdings':('What is Booking Holdings?','Booking Holdings is the company behind Booking.com and related sites. This service watches guest messages from those sites and can draft replies for you to approve.'),
     'Expedia Group':('What is Expedia Group?','Expedia Group includes Expedia, Hotels.com, Vrbo and related sites. This service watches guest messages from those sites and can draft replies for you to approve.'),
     'Airbnb':('What is Airbnb?','Airbnb is a site where guests book stays in homes, B&Bs and hotels. This service watches Airbnb guest messages and can draft replies for you to approve.'),
