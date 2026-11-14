@@ -140,7 +140,7 @@
   function suggest(yes){
     var names=yes.map(nm),has=function(a){return a.some(function(x){return names.indexOf(x)>-1;});};
     if(!names.length)return null;
-    var pkg=has(['Instagram','Facebook','AI Email inbox management','WhatsApp morning summary','Posts','X (Twitter)','TikTok','Google reviews','Other review sites'])?'Full service':has(['Area pages with maps','News and events page','Listings and directories','Live bookings and availability calendar'])?'Growth':'Essentials';
+    var pkg=has(['Instagram','Facebook','AI Email inbox management','WhatsApp morning summary','Posts','X (Twitter)','TikTok','Google reviews','Other review sites'])?'Full service':has(['Area pages with maps','News and events page','Listings and directories','Book Direct & Availability Calendar'])?'Growth':'Essentials';
     var add=names.filter(function(x){return /ordering automation|SEO|AI consultation/.test(x);});
     if(add.length===names.length)pkg=null;
     return {pkg:pkg,add:add};
