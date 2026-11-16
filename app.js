@@ -181,6 +181,48 @@
       btn.addEventListener('click',function(){setGroupOpen(g,!g.classList.contains('is-open'));});
     });
   })();
+  // live search: filter cards by title and description; does not change picks
+  (function(){
+    var input=$('svc-q'),clear=$('svc-q-clear'),empty=$('svc-q-status'),form=$('svc-search');
+    if(!input)return;
+    var groups=[].slice.call(document.querySelectorAll('#svc-list .group'));
+    var saved=null;
+    function hay(r){
+      var n=r.querySelector('.svc-name'),p=r.querySelector('h4 + p');
+      return ((n?n.textContent:'')+' '+(p?p.textContent:'')).toLowerCase();
+    }
+    function filter(){
+      var raw=input.value||'',q=raw.trim().toLowerCase();
+      if(clear)clear.hidden=!raw;
+      if(!q){
+        rows.forEach(function(r){r.hidden=false;});
+        groups.forEach(function(g,i){g.hidden=false;if(saved)setGroupOpen(g,saved[i]);});
+        saved=null;
+        if(empty){empty.hidden=true;empty.textContent='';}
+        return;
+      }
+      if(!saved)saved=groups.map(function(g){return g.classList.contains('is-open');});
+      var any=0;
+      groups.forEach(function(g){
+        var hits=0;
+        [].slice.call(g.querySelectorAll('.svc')).forEach(function(r){
+          var on=hay(r).indexOf(q)!==-1;
+          r.hidden=!on;
+          if(on)hits++;
+        });
+        g.hidden=!hits;
+        if(hits){setGroupOpen(g,true);any+=hits;}
+      });
+      if(empty){
+        if(any){empty.hidden=true;empty.textContent='';}
+        else{empty.hidden=false;empty.textContent='No services match';}
+      }
+    }
+    input.addEventListener('input',filter);
+    if(form)form.addEventListener('submit',function(e){e.preventDefault();});
+    if(clear)clear.addEventListener('click',function(){input.value='';filter();input.focus();});
+    input.addEventListener('keydown',function(e){if(e.key==='Escape'&&input.value){e.preventDefault();input.value='';filter();}});
+  })();
   function selectionText(){
     var L=['Services selection:',''];
     ['yes','maybe','no'].forEach(function(v){var list=pick(v);if(!list.length)return;L.push((v==='yes'?'Yes':v==='maybe'?'Maybe':'No')+' ('+list.length+')');list.forEach(function(r){L.push('- '+label(r)+' ['+r.dataset.area+']');});L.push('');});

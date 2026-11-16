@@ -109,11 +109,12 @@ SV=[
 ('Bookings','shop','Google Business Profile','Manage your business profile and add info, pictures, website and booking links.','On request',False),
 ('Bookings','cal','Google Bookings','Take bookings directly via Google Search and Google Maps.','On request',False),
 ('Admin','server','Uptime monitoring and alerts','We watch your website around the clock and alert you straight away if it goes down, then get it back up.','Checked every 5 minutes',False,{'freq':('Check frequency',['5 min','Hourly'],'5 min')}),
-('Bookings','gift','Gift Vouchers','Add a \u201cGift Vouchers\u201d button to your website so customers can buy vouchers online, with payment going directly to your own account.','On request',False),
+('Online Shop','gift','Gift Vouchers','Add a \u201cGift Vouchers\u201d button to your website so customers can buy vouchers online, with payment going directly to your own account.','On request',False),
 ('AI','chat','Custom Chatbot','A helpful chatbot on your website that answers customers\u2019 questions instantly, using your own information.','On request',False),
+('Online Shop','shop','Buy Direct','Add a shop to your website so customers can buy your products directly online, with payment going straight to your own account.','On request',False),
 ]
-GROUPS=[('Website','globe'),('Bookings','cal'),('Social','chat'),('Reviews','star'),('Admin','chart'),('AI','spark'),('SEO','search')]
-NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty',31:'Thirty-one',32:'Thirty-two',33:'Thirty-three'}
+GROUPS=[('Website','globe'),('Bookings','cal'),('Online Shop','shop'),('Social','chat'),('Reviews','star'),('Admin','chart'),('AI','spark'),('SEO','search')]
+NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty',31:'Thirty-one',32:'Thirty-two',33:'Thirty-three',34:'Thirty-four'}
 N_CORE=sum(1 for s in SV if not s[5]); N_ADD=len(SV)-N_CORE
 def extras_html(i,ex):
     if not ex: return ''
@@ -585,7 +586,18 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <section class="section" id="services" aria-labelledby="pk-h"><div class="wrap">
 <div class="head rv"><span class="eyebrow">What we\u2019ll handle for you</span><h2 id="pk-h">{NUMW.get(N_CORE,N_CORE)} services and { {0:'no add-ons',1:'one add-on',2:'two add-ons'}.get(N_ADD, str(N_ADD)+' add-ons') }. Pick what you need.</h2><p class="lead">They\u2019re grouped by what they do for your business. Choose Yes, Maybe or No for each one. Your picks add up on the right, and you can email them to us in one click.</p></div>
 <div class="picker">
+<div class="picker-main">
+<form class="svc-search" id="svc-search" role="search" action="#" method="get">
+<label class="svc-search-label" for="svc-q">Search services</label>
+<div class="svc-search-ctrl">
+<span class="svc-search-ic" aria-hidden="true">{I('search')}</span>
+<input type="search" id="svc-q" name="q" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="search" placeholder="Name or description" aria-controls="svc-list" aria-describedby="svc-q-status">
+<button type="button" class="svc-search-clear" id="svc-q-clear" hidden aria-label="Clear search"><span aria-hidden="true">×</span></button>
+</div>
+<p class="svc-search-empty" id="svc-q-status" role="status" aria-live="polite" hidden></p>
+</form>
 <div id="svc-list">{svc_html()}</div>
+</div>
 <aside class="summary" aria-labelledby="sum-h" aria-live="polite">
 <h3 id="sum-h">Please select the services you\u2019re interested in</h3>
 <p class="muted" style="margin:0;color:#a9b8c3;font-size:.92rem" id="sum-sub">Nothing picked yet. Choose Yes, Maybe or No for each service.</p>
