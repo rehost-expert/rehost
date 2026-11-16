@@ -110,9 +110,10 @@ SV=[
 ('Bookings','cal','Google Bookings','Take bookings directly via Google Search and Google Maps.','On request',False),
 ('Admin','server','Uptime monitoring and alerts','We watch your website around the clock and alert you straight away if it goes down, then get it back up.','Checked every 5 minutes',False,{'freq':('Check frequency',['5 min','Hourly'],'5 min')}),
 ('Bookings','gift','Gift Vouchers','Add a \u201cGift Vouchers\u201d button to your website so customers can buy vouchers online, with payment going directly to your own account.','On request',False),
+('AI','chat','Custom Chatbot','A helpful chatbot on your website that answers customers\u2019 questions instantly, using your own information.','On request',False),
 ]
 GROUPS=[('Website','globe'),('Bookings','cal'),('Social','chat'),('Reviews','star'),('Admin','chart'),('AI','spark'),('SEO','search')]
-NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty',31:'Thirty-one',32:'Thirty-two'}
+NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one',22:'Twenty-two',23:'Twenty-three',24:'Twenty-four',25:'Twenty-five',26:'Twenty-six',27:'Twenty-seven',28:'Twenty-eight',29:'Twenty-nine',30:'Thirty',31:'Thirty-one',32:'Thirty-two',33:'Thirty-three'}
 N_CORE=sum(1 for s in SV if not s[5]); N_ADD=len(SV)-N_CORE
 def extras_html(i,ex):
     if not ex: return ''
@@ -608,7 +609,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 
 <section class="section section--sand" id="what-is-ai" aria-labelledby="wai-h"><div class="wrap">
 <div class="head rv"><span class="eyebrow">A plain-English guide</span><h2 id="wai-h">What is AI?</h2>
-<p class="lead">AI is software that can understand and write text, spot patterns in your data, and help with routine work \u2014 like drafting a reply or picking out what needs you today. It assists; you stay in control, and you approve anything that goes out.</p></div>
+<p class="lead">AI is software that can understand and write text, spot patterns in your data, and help with routine work \u2014 like drafting a reply or picking out what needs you today. It can also power a chatbot on your website that answers common questions from your own information. It assists; you stay in control, and you approve anything that goes out.</p></div>
 <div class="wai-cards">
 <div class="wai-card rv">{I('chat')}<b>Drafting replies</b><p>When a guest or customer writes in \u2014 by email, on Instagram or Facebook, or through an OTA such as Booking.com, Airbnb or Expedia \u2014 AI can draft a reply for you to check. Nothing is sent until you approve it.</p></div>
 <div class="wai-card rv">{I('inbox')}<b>Inbox sorting</b><p>Your business inbox is sorted, real enquiries are flagged, and you get a reminder when something still needs a follow-up. You decide what goes back out.</p></div>
@@ -616,7 +617,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <div class="wai-card rv">{I('doc')}<b>Plans, quantities and quotes</b><p>For builders and trades, AI can help work out quantities from plans (like a QS), generate 3D drawings from plans, and prepare quotations \u2014 always for you to review.</p></div>
 <div class="wai-card rv">{I('sun')}<b>Morning summaries</b><p>Instead of checking every inbox and app, you can get one WhatsApp message each morning: new enquiries, bookings, reviews and anything on the website that needs you.</p></div>
 </div>
-<div class="wai-note rv">{I('shield')}<div><b>It doesn\u2019t send anything without your OK</b><p>AI is not a replacement for your judgment, and it is not left to talk to your customers on its own. Nothing is sent, posted or ordered until you say so. We only use it on the work you ask us to handle, and you stay in control of your accounts and your customers\u2019 data.</p></div></div>
+<div class="wai-note rv">{I('shield')}<div><b>It doesn\u2019t send anything without your OK</b><p>AI is not a replacement for your judgment. A chatbot on your website can answer from your own information; emails, posts and orders are not sent until you say so. We only use it on the work you ask us to handle, and you stay in control of your accounts and your customers\u2019 data.</p></div></div>
 </div></section>
 
 <section class="section" id="what-is-seo" aria-labelledby="wseo-h"><div class="wrap">
