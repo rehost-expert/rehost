@@ -141,6 +141,20 @@ def group_slug(g):
     while '--' in s: s=s.replace('--','-')
     return s.strip('-')
 
+def service_slug(name):
+    s=name.lower().replace('&',' ').replace('\u2019','').replace("'",'')
+    s=''.join(c if c.isalnum() else '-' for c in s)
+    while '--' in s: s=s.replace('--','-')
+    return 'service-'+s.strip('-')
+def service_slugs():
+    used,out=set(),{}
+    for i,s in enumerate(SV):
+        base=service_slug(s[2]); slug=base; n=2
+        while slug in used:
+            slug=base+'-'+str(n); n+=1
+        used.add(slug); out[i]=slug
+    return out
+
 # Short plain-English explanations for jargon in the picker (info buttons).
 INFO_GROUP={
     'Bookings':('What is an OTA?','OTA means Online Travel Agency: websites like Booking.com, Expedia and Airbnb where guests book your rooms.'),
@@ -182,6 +196,7 @@ def card_info(name, group, ex=None):
     return info_btn(*tip, extra)
 def svc_html():
     out=[]
+    slugs=service_slugs()
     for n,(g,gi) in enumerate(GROUPS):
         items=[(i,s) for i,s in enumerate(SV) if s[0]==g]
         title=group_label(g)
@@ -206,8 +221,9 @@ def svc_html():
             ota=bool(ex and ex.get('ota'))
             ic=f'<span class="svc-ic" aria-hidden="true">{I("plane")}</span>' if ota else ''
             guide='<p class="svc-guide"><a href="#what-is-ai">What is AI? Read our plain-English guide</a></p>' if s[2]=='AI consultation' else ''
-            out.append(f"""<article class="svc{" ota" if ota else ""}" data-i="{i}" data-area="{E(g)}" data-name="{nm}"{extra}>
-<div><h4>{ic}<span class="svc-name">{nm}</span>{card_info(s[2],g,ex)}{' <span class="addon">Add-on</span>' if s[5] else ''}</h4><p>{E(s[3])}</p>{guide}</div>
+            link=f'<button type="button" class="svc-link" aria-label="Copy link to {nm}" data-svc-link>{I("link")}</button>'
+            out.append(f"""<article class="svc{" ota" if ota else ""}" id="{slugs[i]}" data-i="{i}" data-area="{E(g)}" data-name="{nm}"{extra}>
+<div><h4>{ic}<span class="svc-name">{nm}</span>{card_info(s[2],g,ex)}{' <span class="addon">Add-on</span>' if s[5] else ''}{link}</h4><p>{E(s[3])}</p>{guide}</div>
 <fieldset class="seg"><legend>Include {nm}?</legend>
 <label class="y"><input type="radio" name="s{i}" value="yes"><span>Yes</span></label>
 <label class="m"><input type="radio" name="s{i}" value="maybe"><span>Maybe</span></label>

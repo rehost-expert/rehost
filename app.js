@@ -182,6 +182,7 @@
     });
   })();
   // live search: filter cards by title and description; does not change picks
+  var clearSvcSearch=function(){};
   (function(){
     var input=$('svc-q'),clear=$('svc-q-clear'),empty=$('svc-q-status'),form=$('svc-search');
     if(!input)return;
@@ -222,7 +223,83 @@
     if(form)form.addEventListener('submit',function(e){e.preventDefault();});
     if(clear)clear.addEventListener('click',function(){input.value='';filter();input.focus();});
     input.addEventListener('keydown',function(e){if(e.key==='Escape'&&input.value){e.preventDefault();input.value='';filter();}});
+    clearSvcSearch=function(){input.value='';filter();};
   })();
+  // share/copy a stable link to one service; does not change picks
+  var CANON='https://rehost.expert/';
+  function serviceUrl(id){return CANON+'#'+id;}
+  function isMobileShare(){
+    return !!(navigator.share && (window.matchMedia('(max-width:640px)').matches || window.matchMedia('(pointer: coarse)').matches));
+  }
+  function copyText(text,done){
+    function fallback(){
+      var ta=document.createElement('textarea');
+      ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0';
+      document.body.appendChild(ta);ta.select();
+      var ok=false;try{ok=document.execCommand('copy');}catch(e){}
+      document.body.removeChild(ta);done(ok);
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){done(true);}).catch(fallback);
+    } else fallback();
+  }
+  function linkToast(btn,msg){
+    var tip=document.getElementById('svc-link-toast');
+    if(!tip){
+      tip=document.createElement('div');
+      tip.id='svc-link-toast';
+      tip.className='svc-link-toast';
+      tip.setAttribute('role','status');
+      tip.setAttribute('aria-live','polite');
+      document.body.appendChild(tip);
+    }
+    tip.textContent=msg;tip.hidden=false;
+    var r=btn.getBoundingClientRect(),pad=8;
+    var w=tip.offsetWidth,h=tip.offsetHeight;
+    var left=Math.min(Math.max(pad,r.left+r.width/2-w/2),window.innerWidth-w-pad);
+    var top=r.top-h-8;if(top<pad)top=r.bottom+8;
+    tip.style.left=left+'px';tip.style.top=top+'px';
+    clearTimeout(linkToast.t);
+    linkToast.t=setTimeout(function(){tip.hidden=true;},2000);
+  }
+  rows.forEach(function(r){
+    var btn=r.querySelector('.svc-link');if(!btn)return;
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if(!r.id)return;
+      var url=serviceUrl(r.id),title=nm(r);
+      function copied(){linkToast(btn,'Link copied');}
+      if(isMobileShare()){
+        var payload={title:title,text:title,url:url};
+        var shareOk=!navigator.canShare||navigator.canShare(payload);
+        if(shareOk){
+          navigator.share(payload).catch(function(){copyText(url,function(ok){if(ok)copied();});});
+          return;
+        }
+      }
+      copyText(url,function(ok){if(ok)copied();});
+    });
+  });
+  var flashT=null;
+  function openServiceHash(){
+    var h=(location.hash||'').replace(/^#/,'');
+    if(!/^service-[a-z0-9-]+$/.test(h))return;
+    var card=document.getElementById(h);
+    if(!card||!card.classList.contains('svc'))return;
+    clearSvcSearch();
+    var g=card.closest('.group');
+    if(g){g.classList.add('in');setGroupOpen(g,true);}
+    card.classList.remove('is-target');
+    void card.offsetWidth;
+    card.classList.add('is-target');
+    clearTimeout(flashT);
+    flashT=setTimeout(function(){card.classList.remove('is-target');},2500);
+    setTimeout(function(){card.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});},360);
+  }
+  window.addEventListener('hashchange',openServiceHash);
+  if(/^#service-/.test(location.hash||''))setTimeout(openServiceHash,0);
+
   function selectionText(){
     var L=['Services selection:',''];
     ['yes','maybe','no'].forEach(function(v){var list=pick(v);if(!list.length)return;L.push((v==='yes'?'Yes':v==='maybe'?'Maybe':'No')+' ('+list.length+')');list.forEach(function(r){L.push('- '+label(r)+' ['+r.dataset.area+']');});L.push('');});

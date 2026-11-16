@@ -520,3 +520,15 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 .svc-search-empty{margin:10px 0 0;font-size:.95rem;font-weight:600;color:var(--muted)}
 .svc[hidden],.group[hidden]{display:none!important}
 @media (max-width:640px){.svc-search{margin-bottom:12px}.svc-search-ctrl input[type=search]{padding-top:14px;padding-bottom:14px}}
+
+/* per-service share/copy link */
+.svc-link{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin:0;padding:0;border:0;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;flex:none;vertical-align:middle}
+.svc-link svg{width:16px;height:16px;display:block;padding:0;margin:0;max-width:none}
+.svc-link:hover,.svc-link:focus-visible{color:var(--sea);background:#e8f2f5}
+.svc-link:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.svc-link-toast{position:fixed;z-index:90;padding:6px 10px;background:var(--ink);color:#fff;font-size:.82rem;font-weight:700;line-height:1.2;border-radius:8px;box-shadow:0 8px 24px -8px rgba(14,27,38,.45);pointer-events:none;white-space:nowrap}
+.svc-link-toast[hidden]{display:none!important}
+.svc.is-target{border-color:rgba(15,118,110,.65);box-shadow:0 0 0 3px rgba(20,184,166,.3);background:#f3fbfa}
+.svc[id]{scroll-margin-top:96px}
+@media (max-width:640px){.svc-link{width:40px;height:40px;margin:-6px -6px}}
+@media (prefers-reduced-motion: reduce){.svc.is-target{transition:none}}
