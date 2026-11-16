@@ -209,8 +209,9 @@ def svc_html():
         ghref,glabel=guides.get(g,(None,None))
         glink=f'<a class="info-pop-link" href="{ghref}">{glabel}</a>' if ghref else ''
         ginfo=f'<div class="group-info">{info_btn(*gtip, glink)}</div>' if gtip else ''
-        out.append(f'<div class="group rv{" is-open" if open0 else ""}">')
-        out.append(f'<div class="group-head"><h3><button type="button" class="group-toggle" id="group-btn-{slug}" aria-expanded="{"true" if open0 else "false"}" aria-controls="group-panel-{slug}"><span class="group-ic">{I(gi)}</span><span class="group-title">{E(title)}</span><span class="group-meta"><span class="group-count">{E(scount)}</span><span class="group-picked" hidden></span></span>{I("chev","chev")}</button></h3>{ginfo}</div>')
+        glinkbtn=f'<button type="button" class="svc-link group-link" aria-label="Copy link to {E(title)} services" data-group-link>{I("link")}</button>'
+        out.append(f'<div class="group rv{" is-open" if open0 else ""}" id="services-{slug}">')
+        out.append(f'<div class="group-head"><h3><button type="button" class="group-toggle" id="group-btn-{slug}" aria-expanded="{"true" if open0 else "false"}" aria-controls="group-panel-{slug}"><span class="group-ic">{I(gi)}</span><span class="group-title">{E(title)}</span><span class="group-meta"><span class="group-count">{E(scount)}</span><span class="group-picked" hidden></span></span>{I("chev","chev")}</button></h3><div class="group-actions">{glinkbtn}{ginfo}</div></div>')
         out.append(f'<div class="group-body" id="group-panel-{slug}" role="region" aria-labelledby="group-btn-{slug}" aria-hidden="{"false" if open0 else "true"}"><div class="group-panel">')
         if ghref:
             out.append(f'<p class="group-guide"><a href="{ghref}">{glabel}</a></p>')

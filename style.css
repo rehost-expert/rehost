@@ -126,7 +126,7 @@ p{margin:0 0 1em}
 @media (prefers-reduced-motion: reduce){.group-body,.group-toggle svg.chev{transition:none}}
 .group-head{display:flex;align-items:center;gap:0}
 .group-head h3{flex:1;min-width:0;margin:0;font-size:1rem}
-.group-head .group-info{flex:none;display:flex;align-items:center;padding:0 12px 0 0}
+.group-head .group-info{flex:none;display:flex;align-items:center;padding:0}
 .group.is-open .group-head{border-bottom:1px solid var(--line)}
 .group.is-open .group-head .group-toggle{border-bottom:0}
 .info-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;margin:0;padding:0;border:1.5px solid var(--line);border-radius:50%;background:#fff;color:var(--deep);cursor:pointer;flex:none;vertical-align:middle;font:inherit}
@@ -530,5 +530,16 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 .svc-link-toast[hidden]{display:none!important}
 .svc.is-target{border-color:rgba(15,118,110,.65);box-shadow:0 0 0 3px rgba(20,184,166,.3);background:#f3fbfa}
 .svc[id]{scroll-margin-top:96px}
-@media (max-width:640px){.svc-link{width:40px;height:40px;margin:-6px -6px}}
-@media (prefers-reduced-motion: reduce){.svc.is-target{transition:none}}
+.group-actions{flex:none;display:flex;align-items:center;gap:2px;padding:0 8px 0 2px}
+.group-link{flex:none}
+.group.is-target{border-color:rgba(15,118,110,.65);outline:3px solid rgba(20,184,166,.35);outline-offset:2px}
+.group.is-target .group-head{background:#f3fbfa}
+.group[id]{scroll-margin-top:96px}
+@media (max-width:640px){
+  .svc .svc-link{width:40px;height:40px;margin:-6px -6px}
+  .group-link{width:40px;height:40px;margin:0}
+  .group-actions{padding:0 6px 0 0}
+  .group-toggle{padding-right:10px}
+}
+@media (prefers-reduced-motion: reduce){.svc.is-target,.group.is-target{transition:none}}
+
