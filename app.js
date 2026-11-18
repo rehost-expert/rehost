@@ -4,6 +4,44 @@
   function onScroll(){top.classList.toggle('scrolled',window.scrollY>8);}
   window.addEventListener('scroll',onScroll,{passive:true});onScroll();
 
+  // mobile navigation: hamburger opens a panel; Esc / outside tap / a link closes it
+  var navBtn=document.getElementById('nav-toggle'),navPanel=document.getElementById('nav-panel');
+  if(top&&navBtn&&navPanel){
+    var navBack=document.createElement('div');
+    navBack.className='nav-backdrop';
+    navBack.hidden=true;
+    top.insertAdjacentElement('afterend',navBack);
+    function navOpen(){
+      navBtn.setAttribute('aria-expanded','true');
+      navBtn.setAttribute('aria-label','Close menu');
+      navPanel.hidden=false;
+      navBack.hidden=false;
+      top.classList.add('is-nav-open');
+      document.body.classList.add('nav-open');
+    }
+    function navClose(opts){
+      if(navPanel.hidden)return;
+      var back=navPanel.contains(document.activeElement);
+      navBtn.setAttribute('aria-expanded','false');
+      navBtn.setAttribute('aria-label','Open menu');
+      navPanel.hidden=true;
+      navBack.hidden=true;
+      top.classList.remove('is-nav-open');
+      document.body.classList.remove('nav-open');
+      if(back && !(opts&&opts.leaveFocus))navBtn.focus();
+    }
+    navBtn.addEventListener('click',function(e){e.stopPropagation();if(navPanel.hidden)navOpen();else navClose();});
+    navBack.addEventListener('click',function(){navClose();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')navClose();});
+    navPanel.addEventListener('click',function(e){if(e.target.closest('a'))navClose({leaveFocus:true});});
+    if(window.matchMedia){
+      var mq=window.matchMedia('(min-width:981px)');
+      var onMq=function(ev){if(ev.matches)navClose();};
+      if(mq.addEventListener)mq.addEventListener('change',onMq);
+      else if(mq.addListener)mq.addListener(onMq);
+    }
+  }
+
   // reveal on scroll
   var rv=document.querySelectorAll('.rv,.stat');
   if('IntersectionObserver' in window){
@@ -434,7 +472,7 @@
 
 // nav: underline the active menu item (clicked, scrolled-to, or #hash on load) and set aria-current
 (function(){
-  var links=[].slice.call(document.querySelectorAll('.menu a[href]')),items=[];
+  var links=[].slice.call(document.querySelectorAll('.menu a[href], .nav-panel-menu a[href]')),items=[];
   var here=location.pathname.replace(/\/$/,'/index.html').split('/').pop()||'index.html';
   links.forEach(function(a){var h=a.getAttribute('href'),i=h.indexOf('#');if(i<0)return;
     var pg=h.slice(0,i);if(pg&&pg!==here)return;

@@ -75,6 +75,25 @@ VER=_ver()
 LOGO='''<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14b8a6"/><stop offset="1" stop-color="#0f5f73"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#lg)"/><path d="M45 22a16 16 0 1 0 3 14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M41 14l6 8-9 3" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 33l6 6 11-12" fill="none" stroke="#ffb199" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>'''
 def BRAND(href): return f'<a class="brand" href="{href}" aria-label="rehost.expert home">{LOGO}<b>rehost<span>.expert</span></b></a>'
 
+def _nav_links(items, cls, label, current=None):
+    bits=[]
+    for it in items:
+        href,text=it[0],it[1]
+        kind=it[2] if len(it)>2 else ''
+        cur=' aria-current="page"' if (kind=='current' or (current and href==current)) else ''
+        if kind=='btn':
+            bits.append(f'<a class="btn btn--primary" href="{E(href)}"{cur}>{E(text)}</a>')
+        else:
+            bits.append(f'<a href="{E(href)}"{cur}>{E(text)}</a>')
+    return f'<nav class="{cls}" aria-label="{E(label)}">{"".join(bits)}</nav>'
+
+def TOP(brand_href, desktop, mobile=None, current=None):
+    if mobile is None: mobile=desktop
+    toggle=('<button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-panel" aria-label="Open menu">'
+            '<span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span></button>')
+    return (f'<header class="top"><div class="wrap">{BRAND(brand_href)}{toggle}{_nav_links(desktop,"menu","Sections",current)}</div>\n'
+            f'<div class="nav-panel" id="nav-panel" hidden>{_nav_links(mobile,"nav-panel-menu","Mobile",current)}</div></header>')
+
 # ---------------- services (generic, home page picker) ----------------
 SV=[
 ('Website','globe','Hosting and updates','Fast, low-cost hosting on your own domain with a secure (https) certificate. Text, photo, product, menu and price changes whenever you ask.','Changes within 2 working days',False),
@@ -547,8 +566,9 @@ def foot(line,home):
 HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it',
  'rehost.expert rehosts and fixes broken websites for small businesses, looks after domain and certificate renewals, and takes the screen work off your desk: enquiries, social media, reviews and online admin.',
  'Website rescue, hosting and digital services for small businesses.')+f'''
-<header class="top"><div class="wrap">{BRAND('#top')}
-<nav class="menu" aria-label="Sections"><a href="#broken">Broken site?</a><a href="#services">Services</a><a href="#ai">AI consultation</a><a href="#sectors">Who it\u2019s for</a><a href="business.html">Business</a><a href="#packages">Packages</a><a href="contact.html">Contact us</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
+{TOP('#top',
+    [('#broken','Broken site?'),('#services','Services'),('#ai','AI consultation'),('#sectors','Who it\u2019s for'),('business.html','Business'),('#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    [('#broken','Broken site?'),('#services','Services'),('#what-is-ai','What is AI'),('#what-is-seo','What is SEO'),('#ai','AI consultation'),('#sectors','Who it\u2019s for'),('business.html','Business'),('#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')])}
 <main id="main">
 <section class="hero"><div class="wrap">
 <div class="rv">
@@ -809,8 +829,9 @@ jump_html='\n'.join(f'<a href="#{i}">{I(ic)}{E(t)}</a>' for i,ic,t in JUMP)
 BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI help for small businesses',
  'rehost.expert for small businesses: examples for hospitality, builders, trades, salons, shops, garages, clinics, professional services, farms, tour operators, clubs and charities, with what we\u2019d do and how AI can help.',
  'Website rescue, admin and AI help for small businesses, with examples by type of business.')+f'''
-<header class="top"><div class="wrap">{BRAND('index.html')}
-<nav class="menu" aria-label="Sections"><a href="index.html">All services</a><a href="#jump">Examples</a><a href="#hospitality">Hospitality</a><a href="index.html#ai">AI consultation</a><a href="index.html#packages">Packages</a><a href="contact.html">Contact us</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
+{TOP('index.html',
+    [('index.html','All services'),('#jump','Examples'),('#hospitality','Hospitality'),('index.html#ai','AI consultation'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    [('index.html','All services'),('#jump','Examples'),('#hospitality','Hospitality'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')])}
 <main id="main">
 <section class="hero"><div class="wrap">
 <div class="rv">
@@ -895,8 +916,10 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
 CON=head('Contact us \u00b7 rehost.expert \u00b7 Call Shane',
  'Contact rehost.expert: call Shane on +353 85 227 8203 or send us a message. Based in West Cork.',
  'Call Shane or send us a message. Based in West Cork.')+f'''
-<header class="top"><div class="wrap">{BRAND('index.html')}
-<nav class="menu" aria-label="Sections"><a href="index.html#broken">Broken site?</a><a href="index.html#services">Services</a><a href="index.html#ai">AI consultation</a><a href="index.html#sectors">Who it\u2019s for</a><a href="business.html">Business</a><a href="index.html#packages">Packages</a><a href="contact.html" aria-current="page">Contact us</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
+{TOP('index.html',
+    [('index.html#broken','Broken site?'),('index.html#services','Services'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    [('index.html#broken','Broken site?'),('index.html#services','Services'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    current='contact.html')}
 <main id="main">
 <section class="hero hero--contact"><div class="wrap">
 <div class="rv">
