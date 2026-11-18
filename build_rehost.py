@@ -46,6 +46,7 @@ ICONS.update({
 'shop':'<path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M5 12v9h14v-9M10 21v-5h4v5"/>',
 'wrench':'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3 17.8V21h3.2l6.3-6.3a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>',
 'plus':'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/>',
+'dots':'<circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/>',
 'users':'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>',
 'compass':'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
 'bed':'<path d="M3 18V6M3 13h18v5M21 13a3 3 0 0 0-3-3h-7v3"/><circle cx="7" cy="10.5" r="1.8"/>',
@@ -824,7 +825,7 @@ def ex_html():
 <div class="ctas rv">{ai_btn(title)}<a class="btn btn--ghost" href="#contact">Get in touch</a><a class="back" href="#jump">{I('list')}All examples</a></div>
 </div></section>''')
     return '\n'.join(o)
-JUMP=[('hospitality','bed','Hospitality')]+[(e[0],e[1],e[2]) for e in EXAMPLES]
+JUMP=[('hospitality','bed','Hospitality')]+[(e[0],e[1],e[2]) for e in EXAMPLES]+[('other','dots','Etc.')]
 jump_html='\n'.join(f'<a href="#{i}">{I(ic)}{E(t)}</a>' for i,ic,t in JUMP)
 BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI help for small businesses',
  'rehost.expert for small businesses: examples for hospitality, builders, trades, salons, shops, garages, clinics, professional services, farms, tour operators, clubs and charities, with what we\u2019d do and how AI can help.',
@@ -909,6 +910,11 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
 
 '''+f'''
 {ex_html()}
+
+<section class="section section--sand" id="other" aria-labelledby="ot-h"><div class="wrap">
+<div class="head rv"><span class="eyebrow">Other businesses</span><h2 id="ot-h">Don\u2019t see your kind of business?</h2><p class="lead">The same services work for any small business, not just the examples above. Tell us how you work, and we\u2019ll set things up around that.</p></div>
+<div class="ctas rv"><a class="btn btn--primary" href="#contact">Contact us {I('arrow')}</a><a class="btn btn--ghost" href="index.html#services">Pick your services</a><a class="back" href="#jump">{I('list')}All examples</a></div>
+</div></section>
 
 {cta('Is your website holding your business back?','Tell us your website address and we\u2019ll check it. Then we\u2019ll talk through what you need, with no obligation.','index.html#services')}
 </main>
