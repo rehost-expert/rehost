@@ -481,8 +481,8 @@ CTA_ART='''<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="12
 # Contact address, shown as plain text only (no email links; all contact goes through the Google Form)
 CONTACT='shane@rehost.expert'
 TEL='tel:+353852278203'; TEL_SHOW='+353 85 227 8203'
-def call_block(cls='callbox'):
-    return f'<div class="{cls}"><a class="btn btn--accent btn--call" href="{TEL}">{I("phone")}Call Shane on {TEL_SHOW}</a><p class="based">{I("map")}Based in West Cork</p></div>'
+def call_block(cls='callbox', label='Call Shane on'):
+    return f'<div class="{cls}"><a class="btn btn--accent btn--call" href="{TEL}">{I("phone")}{E(label)} {TEL_SHOW}</a><p class="based">{I("map")}Based in West Cork</p></div>'
 
 def head(title,desc,ogdesc):
     return f'''<!doctype html>
@@ -526,7 +526,7 @@ def cfield(k,label,typ,ac,ph,wide=False):
             f'<input type="{typ}" id="{i}" name="{k}" autocomplete="{ac}"{im} placeholder="{E(ph)}" required aria-required="true" aria-describedby="{i}-err">'
             f'<p class="ferr" id="{i}-err" aria-live="polite" hidden></p></div>')
 
-def cta(h2,p,pick_href):
+def cta(h2,p,pick_href, reply='A personal reply from Shane', thanks='Shane will be in touch soon.', call_label='Call Shane on'):
     # Get in touch: native form that posts to the rehost.expert Google Form (answers land in its Sheet)
     fields=''.join([cfield('name','Your name','text','name','e.g. Mary Murphy'),
         cfield('biz','Business','text','organization','e.g. Murphy\u2019s Caf\u00e9'),
@@ -535,8 +535,8 @@ def cta(h2,p,pick_href):
         cfield('site','Website address','text','url','yourbusiness.ie',True)])
     return f'''<section class="section" id="contact" aria-labelledby="ct-h"><div class="wrap">
 <div class="cta cta--contact rv"><div class="cta-copy"><span class="eyebrow" style="color:var(--sea-2)">Get in touch</span><h2 id="ct-h">{h2}</h2><p>{p}</p>
-<ul class="cta-points" style="list-style:none;padding:0"><li>{I('check')}We look at your current site first</li><li>{I('check')}A personal reply from Shane</li><li>{I('check')}No obligation</li></ul>
-{call_block('callbox callbox--ink')}
+<ul class="cta-points" style="list-style:none;padding:0"><li>{I('check')}We look at your current site first</li><li>{I('check')}{E(reply)}</li><li>{I('check')}No obligation</li></ul>
+{call_block('callbox callbox--ink', label=call_label)}
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px"><a class="btn btn--ghost" href="{pick_href}" style="color:#fff">Pick your services</a></div>
 </div>
 <div class="ccard" id="c-card">
@@ -549,7 +549,7 @@ def cta(h2,p,pick_href):
 <button type="submit" class="btn btn--accent csend" id="c-send"><span class="csend-t">Send message</span>{I('arrow')}</button>
 <p class="cform-alt">Prefer Google Forms? <a href="{GFORM_URL}" target="_blank" rel="noopener">Open the form</a></p>
 </form>
-<div class="cthanks" id="c-thanks" role="status" aria-live="polite" tabindex="-1" hidden><span class="cthanks-i">{I('check')}</span><div><h3>Thanks, we\u2019ve got your message.</h3><p>Shane will be in touch soon.</p><button type="button" class="linkbtn" id="c-again">Send another message</button></div></div>
+<div class="cthanks" id="c-thanks" role="status" aria-live="polite" tabindex="-1" hidden><span class="cthanks-i">{I('check')}</span><div><h3>Thanks, we\u2019ve got your message.</h3><p>{E(thanks)}</p><button type="button" class="linkbtn" id="c-again">Send another message</button></div></div>
 {gf_post('c')}
 </div></div>
 </div></section>'''
@@ -913,9 +913,9 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
 {cta('Is your website holding your business back?','Tell us your website address and we\u2019ll check it. Then we\u2019ll talk through what you need, with no obligation.','index.html#services')}
 </main>
 {foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
-CON=head('Contact us \u00b7 rehost.expert \u00b7 Call Shane',
- 'Contact rehost.expert: call Shane on +353 85 227 8203 or send us a message. Based in West Cork.',
- 'Call Shane or send us a message. Based in West Cork.')+f'''
+CON=head('Contact us \u00b7 rehost.expert',
+ 'Contact rehost.expert: call us on +353 85 227 8203 or send us a message. Based in West Cork.',
+ 'Call us or send us a message. Based in West Cork.')+f'''
 {TOP('index.html',
     [('index.html#broken','Broken site?'),('index.html#services','Services'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
     [('index.html#broken','Broken site?'),('index.html#services','Services'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
@@ -924,12 +924,12 @@ CON=head('Contact us \u00b7 rehost.expert \u00b7 Call Shane',
 <section class="hero hero--contact"><div class="wrap">
 <div class="rv">
 <span class="eyebrow">Contact us</span>
-<h1>Talk to <span class="hl">Shane</span>.</h1>
-<p class="lead">Ring for a chat about your website, or send us a message below and Shane will get back to you.</p>
-{call_block()}
+<h1>Contact <span class="hl">us</span>.</h1>
+<p class="lead">Ring for a chat about your website, or send us a message below and we\u2019ll get back to you.</p>
+{call_block(label='Call us on')}
 </div>
 </div></section>
-{cta('Prefer to send a message?','Tell us your website address and we\u2019ll check it. Then we\u2019ll talk through what you need, with no obligation.','index.html#services')}
+{cta('Prefer to send a message?','Tell us your website address and we\u2019ll check it. Then we\u2019ll talk through what you need, with no obligation.','index.html#services', reply='A personal reply from us', thanks='We\u2019ll be in touch soon.', call_label='Call us on')}
 </main>
 {foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
 REDIRECT='''<!doctype html>
