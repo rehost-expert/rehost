@@ -989,7 +989,7 @@ WD=head('Website building and redesign \u00b7 rehost.expert',
 <section class="hero hero--contact"><div class="wrap">
 <div class="rv">
 <a class="crumb" href="index.html">{I('home')}rehost.expert</a><span class="crumb-sep" aria-hidden="true">/</span><span class="eyebrow" style="display:inline-flex">Website design</span>
-<h1>A new website, or a <span class="hl">fresh look</span> for the one you have.</h1>
+<h1>A new website, or a <span class="hl">fresh look</span> for your old site.</h1>
 <p class="lead">We build new websites and redesign existing ones for small businesses of any kind \u2014 shops, trades, practices, hospitality, clubs and others. Mobile-friendly, fast and secure, on your own domain.</p>
 <div class="ctas"><a class="btn btn--primary" href="#contact">Get in touch {I('arrow')}</a><a class="btn btn--ghost" href="index.html#services">Pick your services</a></div>
 <figure class="wd-fig"><img src="img/site-migration.svg" width="960" height="440" alt="An old, slow and insecure website being moved by rehost.expert to a fresh, fast, secure and mobile-friendly new site, keeping the content, photos and domain" loading="eager" decoding="async"></figure>
