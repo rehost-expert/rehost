@@ -1,5 +1,5 @@
 # Generates rehost/index.html (generic), rehost/business.html (examples incl. hospitality) and rehost/hospitality.html (redirect). Self-contained; relative paths only
-import html, hashlib
+import html, hashlib, json
 E=html.escape
 ICONS={
 'globe':'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/>',
@@ -63,6 +63,7 @@ ICONS.update({
 'phone':'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
 'link':'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
 'plane':'<path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9L2 14v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>',
+'x':'<path d="M6 6l12 12M18 6 6 18"/>',
 })
 OUTDIR='/workspace/rehost-repo/'
 # Cache-busting: ?v= is a hash of the asset files, so every change to style.css/app.js/favicon.svg gets a new URL
@@ -88,12 +89,40 @@ def _nav_links(items, cls, label, current=None):
             bits.append(f'<a href="{E(href)}"{cur}>{E(text)}</a>')
     return f'<nav class="{cls}" aria-label="{E(label)}">{"".join(bits)}</nav>'
 
+def SEARCH_UI():
+    return (
+        '<div class="site-search" id="site-search" hidden>'
+        '<div class="site-search-back" id="site-search-back"></div>'
+        '<div class="site-search-dialog" id="site-search-dialog" role="dialog" aria-modal="true" aria-labelledby="site-search-title">'
+        '<div class="site-search-bar">'
+        '<h2 id="site-search-title" class="vh">Search the site</h2>'
+        f'<form class="site-search-form" id="site-search-form" role="search" action="#" method="get">'
+        f'<span class="site-search-ic" aria-hidden="true">{I("search")}</span>'
+        '<label for="site-search-q" class="vh">Search pages and services</label>'
+        '<input type="search" id="site-search-q" name="q" placeholder="Search pages and services" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search">'
+        f'<button type="button" class="site-search-clear" id="site-search-clear" hidden aria-label="Clear search">{I("x")}</button>'
+        '</form>'
+        f'<button type="button" class="site-search-close" id="site-search-close" aria-label="Close search">{I("x")}</button>'
+        '</div>'
+        '<div class="site-search-body">'
+        '<p class="site-search-status" id="site-search-status" role="status" aria-live="polite"></p>'
+        '<ul class="site-search-results" id="site-search-results" role="listbox" aria-label="Search results"></ul>'
+        '</div></div></div>'
+    )
+
 def TOP(brand_href, desktop, mobile=None, current=None):
     if mobile is None: mobile=desktop
     toggle=('<button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-panel" aria-label="Open menu">'
             '<span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span></button>')
-    return (f'<header class="top"><div class="wrap">{BRAND(brand_href)}{toggle}{_nav_links(desktop,"menu","Sections",current)}</div>\n'
-            f'<div class="nav-panel" id="nav-panel" hidden>{_nav_links(mobile,"nav-panel-menu","Mobile",current)}</div></header>')
+    search_btn=('<button type="button" class="site-search-btn" data-open-search aria-expanded="false" aria-controls="site-search" aria-label="Search the site">'
+                f'{I("search")}</button>')
+    panel_search=('<button type="button" class="nav-panel-search" data-open-search aria-expanded="false" aria-controls="site-search">'
+                  f'{I("search")}<span>Search the site</span></button>')
+    tools=f'<div class="top-tools">{search_btn}{toggle}</div>'
+    return (f'<header class="top"><div class="wrap">{BRAND(brand_href)}<div class="top-end">{_nav_links(desktop,"menu","Sections",current)}{tools}</div></div>\n'
+            f'<div class="nav-panel" id="nav-panel" hidden>{panel_search}{_nav_links(mobile,"nav-panel-menu","Mobile",current)}</div></header>\n'
+            f'{SEARCH_UI()}')
+
 
 # ---------------- services (generic, home page picker) ----------------
 SV=[
@@ -225,7 +254,7 @@ def svc_html():
         scount=f'{nsvc} service' if nsvc==1 else f'{nsvc} services'
         open0=n==0
         gtip=INFO_GROUP.get(g)
-        guides={'AI':('#what-is-ai','What is AI? Read our plain-English guide'),'SEO':('#what-is-seo','What is SEO? Read our plain-English guide')}
+        guides={'Website':('website-design.html','Website building and redesign: what we offer'),'AI':('#what-is-ai','What is AI? Read our plain-English guide'),'SEO':('#what-is-seo','What is SEO? Read our plain-English guide')}
         ghref,glabel=guides.get(g,(None,None))
         glink=f'<a class="info-pop-link" href="{ghref}">{glabel}</a>' if ghref else ''
         ginfo=f'<div class="group-info">{info_btn(*gtip, glink)}</div>' if gtip else ''
@@ -241,7 +270,7 @@ def svc_html():
             extra=' data-extra="1"' if ex else ''
             ota=bool(ex and ex.get('ota'))
             ic=f'<span class="svc-ic" aria-hidden="true">{I("plane")}</span>' if ota else ''
-            guide='<p class="svc-guide"><a href="#what-is-ai">What is AI? Read our plain-English guide</a></p>' if s[2]=='AI consultation' else ''
+            guide=('<p class="svc-guide"><a href="#what-is-ai">What is AI? Read our plain-English guide</a></p>' if s[2]=='AI consultation' else '<p class="svc-guide"><a href="website-design.html">Website building and redesign: what we offer</a></p>' if s[2]=='Website redesign' else '')
             link=f'<button type="button" class="svc-link" aria-label="Copy link to {nm}" data-svc-link>{I("link")}</button>'
             out.append(f"""<article class="svc{" ota" if ota else ""}" id="{slugs[i]}" data-i="{i}" data-area="{E(g)}" data-name="{nm}"{extra}>
 <div><h4>{ic}<span class="svc-name">{nm}</span>{card_info(s[2],g,ex)}{' <span class="addon">Add-on</span>' if s[5] else ''}{link}</h4><p>{E(s[3])}</p>{guide}</div>
@@ -502,6 +531,8 @@ def head(title,desc,ogdesc):
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg?v={VER}" type="image/svg+xml">
 <link rel="stylesheet" href="style.css?v={VER}">
+<link rel="preload" href="search-index.json?v=__INDEX_VER__" as="fetch" crossorigin>
+<link id="site-search-index" href="search-index.json?v=__INDEX_VER__">
 <script>document.documentElement.classList.remove('no-js')</script>
 </head>
 <body id="top">
@@ -568,8 +599,8 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
  'rehost.expert rehosts and fixes broken websites for small businesses, looks after domain and certificate renewals, and takes the screen work off your desk: enquiries, social media, reviews and online admin.',
  'Website rescue, hosting and digital services for small businesses.')+f'''
 {TOP('#top',
-    [('#broken','Broken site?'),('#services','Services'),('#ai','AI consultation'),('#sectors','Who it\u2019s for'),('business.html','Business'),('#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
-    [('#broken','Broken site?'),('#services','Services'),('#what-is-ai','What is AI'),('#what-is-seo','What is SEO'),('#ai','AI consultation'),('#sectors','Who it\u2019s for'),('business.html','Business'),('#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')])}
+    [('#broken','Broken site?'),('#services','Services'),('website-design.html','Website design'),('#ai','AI consultation'),('#sectors','Who it\u2019s for'),('business.html','Business'),('#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    [('#broken','Broken site?'),('#services','Services'),('website-design.html','Website design'),('#what-is-ai','What is AI'),('#what-is-seo','What is SEO'),('#ai','AI consultation'),('#sectors','Who it\u2019s for'),('business.html','Business'),('#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')])}
 <main id="main">
 <section class="hero"><div class="wrap">
 <div class="rv">
@@ -831,8 +862,8 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
  'rehost.expert for small businesses: examples for hospitality, builders, trades, salons, shops, garages, clinics, professional services, farms, tour operators, clubs and charities, with what we\u2019d do and how AI can help.',
  'Website rescue, admin and AI help for small businesses, with examples by type of business.')+f'''
 {TOP('index.html',
-    [('index.html','All services'),('#jump','Examples'),('#hospitality','Hospitality'),('index.html#ai','AI consultation'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
-    [('index.html','All services'),('#jump','Examples'),('#hospitality','Hospitality'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')])}
+    [('index.html','All services'),('website-design.html','Website design'),('#jump','Examples'),('#hospitality','Hospitality'),('index.html#ai','AI consultation'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    [('index.html','All services'),('website-design.html','Website design'),('#jump','Examples'),('#hospitality','Hospitality'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')])}
 <main id="main">
 <section class="hero"><div class="wrap">
 <div class="rv">
@@ -923,8 +954,8 @@ CON=head('Contact us \u00b7 rehost.expert',
  'Contact rehost.expert: call us on +353 85 227 8203 or send us a message. Based in West Cork.',
  'Call us or send us a message. Based in West Cork.')+f'''
 {TOP('index.html',
-    [('index.html#broken','Broken site?'),('index.html#services','Services'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
-    [('index.html#broken','Broken site?'),('index.html#services','Services'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    [('index.html#broken','Broken site?'),('index.html#services','Services'),('website-design.html','Website design'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    [('index.html#broken','Broken site?'),('index.html#services','Services'),('website-design.html','Website design'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
     current='contact.html')}
 <main id="main">
 <section class="hero hero--contact"><div class="wrap">
@@ -946,5 +977,139 @@ REDIRECT='''<!doctype html>
 <script data-goatcounter="https://rehostexpert.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body></html>
 '''
-for fn,pg in (('index.html',HOME),('business.html',BUS),('contact.html',CON),('hospitality.html',REDIRECT)):
-    pg=pg.replace('__VER__',VER); open(OUTDIR+fn,'w').write(pg); print('wrote',fn,len(pg))
+# ================= WEBSITE BUILDING AND REDESIGN =================
+WD=head('Website building and redesign \u00b7 rehost.expert',
+ 'New website builds and redesigns of existing sites for small businesses. Mobile-friendly, fast and secure, with SEO basics, easy updates, and hosting or rehosting on your own domain.',
+ 'New websites and redesigns for small businesses, with hosting and ongoing care.')+f'''
+{TOP('index.html',
+    [('index.html#broken','Broken site?'),('index.html#services','Services'),('website-design.html','Website design'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    [('index.html#broken','Broken site?'),('index.html#services','Services'),('website-design.html','Website design'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
+    current='website-design.html')}
+<main id="main">
+<section class="hero hero--contact"><div class="wrap">
+<div class="rv">
+<a class="crumb" href="index.html">{I('home')}rehost.expert</a><span class="crumb-sep" aria-hidden="true">/</span><span class="eyebrow" style="display:inline-flex">Website design</span>
+<h1>A new website, or a <span class="hl">fresh look</span> for the one you have.</h1>
+<p class="lead">We build new websites and redesign existing ones for small businesses of any kind \u2014 shops, trades, practices, hospitality, clubs and others. Mobile-friendly, fast and secure, on your own domain.</p>
+<div class="ctas"><a class="btn btn--primary" href="#contact">Get in touch {I('arrow')}</a><a class="btn btn--ghost" href="index.html#services">Pick your services</a></div>
+</div>
+</div></section>
+<section class="section" id="offer" aria-labelledby="wd-off-h"><div class="wrap">
+<div class="head"><span class="eyebrow">What\u2019s offered</span><h2 id="wd-off-h">New sites, and a fresh look for existing ones.</h2>
+<p class="lead">Whether you\u2019re starting from scratch or your current site is dated, slow or awkward on a phone, we can help. This is for any small business, not only hotels and guesthouses.</p></div>
+<div class="split-2">
+<article class="plan rv">{I('globe')}<h3>New website builds</h3><p class="muted">A clear, modern site for your business, on your own domain, with the pages you need \u2014 about your work, how to find you, and how customers get in touch or book.</p></article>
+<article class="plan rv">{I('layout')}<h3>Website redesigns</h3><p class="muted">A fresh, modern look and a clearer layout for your current site, keeping your content, photos and domain. Your site can stay where it is, or move to us to host.</p>
+<p class="svc-guide"><a href="index.html#service-website-redesign">See Website redesign in the services list</a></p></article>
+</div>
+</div></section>
+<section class="section section--sand" id="how" aria-labelledby="wd-how-h"><div class="wrap">
+<div class="head"><span class="eyebrow">How it works</span><h2 id="wd-how-h">A straightforward process, agreed with you at each step.</h2></div>
+<ol class="steps">
+<li class="rv"><b>We look at what you have, and what you need.</b><span>If you already have a site, we review it with you. If you don\u2019t, we talk through the pages and features your business needs.</span></li>
+<li class="rv"><b>We agree the pages, look and content.</b><span>You decide the tone, colours and photographs. We set out the structure so it is clear what goes on the site before we build it.</span></li>
+<li class="rv"><b>We build or redesign the site, and refine it with you.</b><span>You see the work as it takes shape, and we adjust the layout and wording with you before anything goes live.</span></li>
+<li class="rv"><b>We go live on your domain.</b><span>The site is published on your own address, with hosting and a secure (HTTPS) certificate, so visitors see the padlock.</span></li>
+<li class="rv"><b>We can keep looking after it.</b><span>Updates, renewals and day-to-day care can stay with us afterwards, so the site does not quietly fall behind.</span></li>
+</ol>
+</div></section>
+<section class="section" id="included" aria-labelledby="wd-in-h"><div class="wrap">
+<div class="head"><span class="eyebrow">What\u2019s included</span><h2 id="wd-in-h">The basics that keep a site usable, findable and secure.</h2>
+<p class="lead">Every new or redesigned site includes the following. Further services \u2014 bookings, shops, social media, AI help and more \u2014 can be added from the <a href="index.html#services">services list</a>.</p></div>
+<div class="together light">
+<div class="tog rv">{I('map')}<b>Mobile-friendly</b><p>Looks and works properly on phones, tablets and computers.</p></div>
+<div class="tog rv">{I('bolt')}<b>Fast</b><p>Pages load quickly, without the clutter that slows older sites down.</p></div>
+<div class="tog rv">{I('lock')}<b>Secure HTTPS</b><p>A certificate on your domain, so visitors see the padlock and the connection stays private.</p></div>
+<div class="tog rv">{I('search')}<b>SEO basics</b><p>Clear titles, headings and contact details, so customers can find you on Google.</p></div>
+<div class="tog rv">{I('pen')}<b>Easy updates</b><p>Text, photos, hours and offers changed for you when you ask, so the site stays current.</p></div>
+<div class="tog rv">{I('server')}<b>Hosting and rehosting</b><p>Hosted on your own domain, or moved from a broken or awkward host, with renewals kept on track.</p></div>
+</div>
+</div></section>
+{cta('Shall we talk about your website?','Tell us about the site you have, or the one you need. We\u2019ll look at it and talk through what would help, with no obligation.','index.html#services')}
+</main>
+{foot('Website building and redesign for small businesses. <a href="index.html">All services</a>','index.html')}'''
+
+def search_entries():
+    ev=[]
+    def add(title,url,crumb,text):
+        text=' '.join((text or '').split())
+        ev.append({'title':title.strip(),'url':url.strip(),'crumb':crumb,'text':text})
+    add('rehost.expert','index.html','Home',
+        'Your website, back online and looked after. Expired certificates, lapsed domains, crashed WordPress sites. We rehost and fix them, keep every renewal on track, and take the rest of the screen work off your desk, so you can get on with running your business.')
+    add('Five ways a website quietly stops working','index.html#broken','Home',
+        'Broken website, expired certificate, lapsed domain, crashed WordPress, site that will not load. Check whether your site is broken and how we rehost and fix it.')
+    add('Our services','index.html#services','Services',
+        'Pick the website, bookings, online shop, social media, reviews, admin, AI and SEO services you need. Hosting, updates, WhatsApp summaries and more.')
+    slugs=service_slugs()
+    for i,s in enumerate(SV):
+        add(s[2],'index.html#'+slugs[i],'Services \u00b7 '+s[0], s[3])
+    for g,gi in GROUPS:
+        title=group_label(g)
+        add(title+' services','index.html#services-'+group_slug(g),'Services','Services in the '+title+' group.')
+    add('How could AI help your business?','index.html#ai','AI consultation',
+        'A consultation about where AI could help your business, and where it would not. Drafting, planning and admin, with you approving anything that goes out.')
+    add('What is AI?','index.html#what-is-ai','Guides',
+        'A plain-English guide to what AI is, and how we use it to draft replies, sort emails and help with planning, with your approval before anything is sent.')
+    add('What is SEO?','index.html#what-is-seo','Guides',
+        'A plain-English guide to SEO: helping your site appear higher on Google so customers can find you when they search.')
+    add('WhatsApp morning summary','index.html#morning','Admin',
+        'One WhatsApp message in the morning with everything that needs you: enquiries, bookings, reviews and follow-ups.')
+    add('Built for any small business','index.html#sectors','Who it\u2019s for',
+        'Websites, admin and AI help for hospitality, builders, trades, shops, clinics, clubs, tourism and schools.')
+    for ic,title,desc,href in SECTORS:
+        url=href if href.startswith(('business.html','index.html','website-design.html','contact.html')) else ('index.html'+href if href.startswith('#') else href)
+        add(title,url,'Who it\u2019s for',desc)
+    add('Monthly packages','index.html#packages','Packages',
+        'Three monthly packages: Essentials, Growth and Full service. Add the website, marketing and admin help you need.')
+    for plan in PLANS:
+        bits=[plan[1]]+list(plan[2])
+        if plan[3]: bits.append(plan[3])
+        add(plan[0]+' package','index.html#packages','Packages',' '.join(bits))
+    add('You stay in control','index.html#together','How we work',
+        'Your domain stays in your name. Replies to customers are drafted for your approval. WhatsApp or email us for any changes you require.')
+    add('From first chat to live site','index.html#next','How we work',
+        'Introductory consultation, contract, onboarding, branding and photos, build and design, then go live.')
+    add('Get in touch','index.html#contact','Contact',
+        'Contact rehost.expert about a broken website or the services you need. Call or send a message.')
+    add('Business examples','business.html','Business',
+        'What we would do for different kinds of small business, and how AI can help with the repetitive parts, with you approving anything that goes out. Hotels, builders, trades, salons, shops, garages, clinics, professional firms, farms, tours and clubs.')
+    add('Jump to your kind of business','business.html#jump','Business',
+        'Hospitality, builders, trades, salons, retail, garages, clinics, professional, farms, tours, clubs and others.')
+    add('Hospitality','business.html#hospitality','Business \u00b7 Hospitality',
+        'Hotels, B&Bs and restaurants looked after. Booking calendars, guest messages, reviews, and food and drink orders built from bookings. WhatsApp morning summaries.')
+    add('The screen work of a family hotel, handled','business.html#hosp-services','Business \u00b7 Hospitality',
+        'Hotel, B&B and restaurant website, bookings, reviews and guest messages looked after.')
+    add('Food and drink orders that build themselves','business.html#ordering','Business \u00b7 Hospitality',
+        'Weekly food and drink orders built from bookings, updated as bookings change, approved on WhatsApp and sent to your suppliers.')
+    for row in EXAMPLES:
+        eid,icon,title,who,lead=row[0],row[1],row[2],row[3],row[4]
+        do=row[6] if len(row)>6 else []
+        add(title,'business.html#'+eid,'Business \u00b7 '+title, lead+' For '+who+'. '+' '.join(do))
+    add('Don\u2019t see your kind of business?','business.html#other','Business',
+        'If your kind of business is not listed, get in touch and we will talk through what would help.')
+    add('Contact us','contact.html','Contact',
+        'Contact rehost.expert: call us on +353 85 227 8203 or send us a message. Based in West Cork.')
+    add('Website building and redesign','website-design.html','Website design',
+        'New website builds and redesigns of existing sites for any small business. Mobile-friendly, fast, secure HTTPS, SEO basics, easy updates, and hosting or rehosting on your own domain.')
+    add('What\u2019s offered: new websites and redesigns','website-design.html#offer','Website design',
+        'New website builds and website redesigns. A clear, modern site, or a fresh look for your current site, keeping your content, photos and domain. For shops, trades, practices, hospitality, clubs and other small businesses.')
+    add('How website building and redesign works','website-design.html#how','Website design',
+        'We look at what you have and what you need, agree the pages, look and content, build or redesign the site with you, go live on your domain with hosting and a secure HTTPS certificate, and can keep looking after updates afterwards.')
+    add('What\u2019s included in a new or redesigned website','website-design.html#included','Website design',
+        'Mobile-friendly, fast, secure HTTPS, SEO basics, easy updates, and hosting or rehosting on your own domain.')
+    # keep the first (usually more specific) entry for each URL
+    seen,out=set(),[]
+    for item in ev:
+        if item['url'] in seen: continue
+        seen.add(item['url']); out.append(item)
+    return out
+
+INDEX=search_entries()
+idx_raw=json.dumps(INDEX,ensure_ascii=False,separators=(',',':'))
+open(OUTDIR+'search-index.json','w',encoding='utf-8').write(idx_raw)
+INDEX_VER=hashlib.sha1(idx_raw.encode('utf-8')).hexdigest()[:10]
+for fn,pg in (('index.html',HOME),('business.html',BUS),('contact.html',CON),('website-design.html',WD),('hospitality.html',REDIRECT)):
+    pg=pg.replace('__VER__',VER).replace('__INDEX_VER__',INDEX_VER)
+    open(OUTDIR+fn,'w',encoding='utf-8').write(pg)
+    print('wrote',fn,len(pg))
+print('wrote search-index.json',len(INDEX),'entries')
