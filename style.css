@@ -620,7 +620,7 @@ body.search-open{overflow:hidden}
 .site-search-rtitle{display:block;font-weight:750;letter-spacing:-.02em;font-size:1.02rem}
 .site-search-rcrumb{display:block;margin-top:2px;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--sea)}
 .site-search-rsnip{display:block;margin-top:4px;font-size:.92rem;color:var(--muted);line-height:1.45}
-.site-search-rsnip mark{background:rgba(20,184,166,.22);color:var(--ink);padding:0 .12em;border-radius:3px;font-weight:650}
+.site-search-results mark{background:rgba(20,184,166,.22);color:var(--ink);padding:0 .12em;border-radius:3px;font-weight:650}
 @media (max-width:640px){
   .site-search-dialog{width:100%;margin:72px 0 0;max-height:calc(100vh - 72px);border-radius:0 0 20px 20px;border-left:0;border-right:0}
   .site-search-form input[type=search]{padding-top:14px;padding-bottom:14px;font-size:16px}
