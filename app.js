@@ -76,8 +76,18 @@
   var CKEYS=['name','biz','email','phone','site'],CKEY='rehost-contact-v1',cd={};
   try{var raw=JSON.parse(localStorage.getItem(CKEY)||'{}')||{};CKEYS.forEach(function(k){cd[k]=raw[k]||raw['f-'+k]||'';});if(!cd.site)cd.site=localStorage.getItem('rehost-site-v1')||'';}catch(e){CKEYS.forEach(function(k){cd[k]=cd[k]||'';});}
   function saveCd(){try{localStorage.setItem(CKEY,JSON.stringify(cd));}catch(e){}}
-  // Pre-fill what we already know from an email link (?biz=&email=&phone=&site=&name=); the visitor fills in the rest
-  try{var lq=new URLSearchParams(location.search),lhit=false;CKEYS.forEach(function(k){var v=(lq.get(k)||'').trim().slice(0,120);if(v){cd[k]=v;lhit=true;}});if(lhit)saveCd();}catch(e){}
+  // Pre-fill what we already know from an email or invoice link
+  // (?name=&biz=&email=&phone=&site=&notes=&ref=). Aliases: business, website, url, message, help.
+  var qNotes='';
+  try{
+    var lq=new URLSearchParams(location.search),lhit=false;
+    var alias={business:'biz',website:'site',url:'site'};
+    Object.keys(alias).forEach(function(a){if(!(lq.get(alias[a])||'').trim()&&(lq.get(a)||'').trim())lq.set(alias[a],lq.get(a));});
+    CKEYS.forEach(function(k){var v=(lq.get(k)||'').trim().slice(0,120);if(v){cd[k]=v;lhit=true;}});
+    if(lhit)saveCd();
+    qNotes=(lq.get('notes')||lq.get('message')||lq.get('help')||'').trim().slice(0,1000);
+  }catch(e){}
+  function fillNotes(){if(!qNotes)return;['f-notes','c-help'].forEach(function(id){var el=g(id);if(el&&!el.value)el.value=qNotes;});}
   var EMPTY={name:'Please enter your name.',biz:'Please enter your business name.',email:'Please enter your email address.',phone:'Please enter your phone number.',site:'Please enter your website address.'};
   function fieldError(k,v){v=(v||'').trim();
     if(!v)return EMPTY[k];
@@ -125,6 +135,7 @@
         g('c-card').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});cthx.focus({preventScroll:true});});});
     g('c-again').addEventListener('click',function(){cthx.hidden=true;cform.hidden=false;g('c-help').focus();});
   }
+  fillNotes();
 
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));
@@ -375,7 +386,8 @@
   }
   // Email lead tracking: ?ref=CK-123&site=example.ie (kept for the visit; site pre-fills the form)
   var LEADREF='',qs=new URLSearchParams(location.search);
-  try{var rr=(qs.get('ref')||'').toUpperCase();if(/^CK-\d{1,4}$/.test(rr))sessionStorage.setItem('leadref',rr);LEADREF=sessionStorage.getItem('leadref')||'';}catch(e){}
+  try{var rr=(qs.get('ref')||'').toUpperCase();if(/^(CK-\d{1,4}|RE-INV-\d{4})$/.test(rr))sessionStorage.setItem('leadref',rr);LEADREF=sessionStorage.getItem('leadref')||'';}catch(e){}
+  fillNotes();
   var pgrp=ContactGroup('f-','form-msg',null);
   var thanks=$('sel-thanks');
   $('sel-form').addEventListener('submit',function(e){e.preventDefault();thanks.hidden=true;
