@@ -220,7 +220,11 @@
     g.classList.toggle('is-open',!!open);
     var btn=g.querySelector('.group-toggle'),panel=g.querySelector('.group-body');
     if(btn)btn.setAttribute('aria-expanded',open?'true':'false');
-    if(panel)panel.setAttribute('aria-hidden',open?'false':'true');
+    if(panel){
+      panel.setAttribute('aria-hidden',open?'false':'true');
+      if(open) panel.removeAttribute('inert');
+      else panel.setAttribute('inert','');
+    }
   }
   (function(){
     var groups=[].slice.call(document.querySelectorAll('#svc-list .group'));

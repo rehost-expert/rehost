@@ -70,7 +70,7 @@ OUTDIR='/workspace/rehost-repo/'
 # (GitHub Pages sends max-age=600, so without this a browser can pair new HTML with an old stylesheet).
 def _ver():
     h=hashlib.sha1()
-    for f in ('style.css','app.js','favicon.svg'):
+    for f in ('style.css','app.js','favicon.svg','og-image.png','apple-touch-icon.png'):
         h.update(open(OUTDIR+f,'rb').read())
     return h.hexdigest()[:10]
 VER=_ver()
@@ -95,7 +95,7 @@ def SEARCH_UI():
         '<div class="site-search-back" id="site-search-back"></div>'
         '<div class="site-search-dialog" id="site-search-dialog" role="dialog" aria-modal="true" aria-labelledby="site-search-title">'
         '<div class="site-search-bar">'
-        '<h2 id="site-search-title" class="vh">Search the site</h2>'
+        '<p id="site-search-title" class="vh">Search the site</p>'
         f'<form class="site-search-form" id="site-search-form" role="search" action="#" method="get">'
         f'<span class="site-search-ic" aria-hidden="true">{I("search")}</span>'
         '<label for="site-search-q" class="vh">Search pages and services</label>'
@@ -261,7 +261,7 @@ def svc_html():
         glinkbtn=f'<button type="button" class="svc-link group-link" aria-label="Copy link to {E(title)} services" data-group-link>{I("link")}</button>'
         out.append(f'<div class="group rv{" is-open" if open0 else ""}" id="services-{slug}">')
         out.append(f'<div class="group-head"><h3><button type="button" class="group-toggle" id="group-btn-{slug}" aria-expanded="{"true" if open0 else "false"}" aria-controls="group-panel-{slug}"><span class="group-ic">{I(gi)}</span><span class="group-title">{E(title)}</span><span class="group-meta"><span class="group-count">{E(scount)}</span><span class="group-picked" hidden></span></span>{I("chev","chev")}</button></h3><div class="group-actions">{glinkbtn}{ginfo}</div></div>')
-        out.append(f'<div class="group-body" id="group-panel-{slug}" role="region" aria-labelledby="group-btn-{slug}" aria-hidden="{"false" if open0 else "true"}"><div class="group-panel">')
+        out.append(f'<div class="group-body" id="group-panel-{slug}" role="region" aria-labelledby="group-btn-{slug}" aria-hidden="{"false" if open0 else "true"}"{" inert" if not open0 else ""}><div class="group-panel">')
         if ghref:
             out.append(f'<p class="group-guide"><a href="{ghref}">{glabel}</a></p>')
         for i,s in items:
@@ -372,7 +372,7 @@ def addons_html(L):
         i,t,d=it[:3]; por=len(it)>3
         price='<span class="p por-p">Price on request</span>' if por else '<span class="p">\u20ac[&nbsp;&nbsp;]<small class="muted" style="font-weight:600;font-size:.8rem"> / month</small></span>'
         tag='<span class="addon">One-off</span>' if por else '<span class="addon">Add-on</span>'
-        o.append(f'<article class="addon-card rv{" ai-card" if por else ""}"><div class="top-row">{I(i,"ic")}{price}</div>{tag}<h4>{E(t)}</h4><p>{d if "<a" in d else E(d)}</p></article>')
+        o.append(f'<article class="addon-card rv{" ai-card" if por else ""}"><div class="top-row">{I(i,"ic")}{price}</div>{tag}<h3>{E(t)}</h3><p>{d if "<a" in d else E(d)}</p></article>')
     return '\n'.join(o)
 
 TOG=[('key','Your domain, your control','You control everything to do with your website domain. If we stop working together, the domain is transferred back to you or to a provider of your choosing.'),
@@ -514,26 +514,86 @@ TEL='tel:+353852278203'; TEL_SHOW='+353 85 227 8203'
 def call_block(cls='callbox', label='Call Shane on'):
     return f'<div class="{cls}"><a class="btn btn--accent btn--call" href="{TEL}">{I("phone")}{E(label)} {TEL_SHOW}</a><p class="based">{I("map")}Based in West Cork</p></div>'
 
-def head(title,desc,ogdesc):
+SITE='https://rehost.expert'
+def page_url(path='/'):
+    if not path.startswith('/'):
+        path='/'+path
+    return SITE+path
+def json_ld(title,desc,url):
+    data={
+      '@context':'https://schema.org',
+      '@graph':[
+        {
+          '@type':['LocalBusiness','ProfessionalService'],
+          '@id':SITE+'/#business',
+          'name':'rehost.expert',
+          'url':SITE+'/',
+          'email':CONTACT,
+          'telephone':'+353852278203',
+          'description':'Website rescue, hosting and digital services for small businesses.',
+          'image':SITE+'/og-image.png',
+          'logo':SITE+'/apple-touch-icon.png',
+          'address':{'@type':'PostalAddress','addressRegion':'West Cork','addressCountry':'IE'},
+          'areaServed':{'@type':'AdministrativeArea','name':'West Cork'}
+        },
+        {
+          '@type':'WebSite',
+          '@id':SITE+'/#website',
+          'name':'rehost.expert',
+          'url':SITE+'/',
+          'inLanguage':'en-IE',
+          'publisher':{'@id':SITE+'/#business'}
+        },
+        {
+          '@type':'WebPage',
+          '@id':url+'#webpage',
+          'url':url,
+          'name':title,
+          'description':desc,
+          'isPartOf':{'@id':SITE+'/#website'},
+          'about':{'@id':SITE+'/#business'},
+          'inLanguage':'en-IE'
+        }
+      ]
+    }
+    dumped=json.dumps(data,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
+    return f'<script type="application/ld+json">{dumped}</script>'
+def head(title,desc,ogdesc,path='/'):
+    url=page_url(path)
+    og_img=f'{SITE}/og-image.png?v={VER}'
     return f'''<!doctype html>
 <html lang="en-IE" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="format-detection" content="telephone=no, email=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<link rel="canonical" href="{url}">
 <meta name="theme-color" content="#0e1b26">
 <meta name="color-scheme" content="light">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{ogdesc}">
 <meta property="og:type" content="website">
+<meta property="og:url" content="{url}">
+<meta property="og:locale" content="en_IE">
+<meta property="og:site_name" content="rehost.expert">
+<meta property="og:image" content="{og_img}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="rehost.expert — website rescue, hosting and digital services for small businesses">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{ogdesc}">
+<meta name="twitter:image" content="{og_img}">
 <link rel="icon" href="favicon.svg?v={VER}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v={VER}">
 <link rel="stylesheet" href="style.css?v={VER}">
 <link rel="preload" href="search-index.json?v=__INDEX_VER__" as="fetch" crossorigin>
 <link id="site-search-index" href="search-index.json?v=__INDEX_VER__">
 <script>document.documentElement.classList.remove('no-js')</script>
+{json_ld(title,desc,url)}
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>'''
@@ -588,7 +648,7 @@ def cta(h2,p,pick_href, reply='A personal reply from Shane', thanks='Shane will 
 
 def foot(line,home):
     return f'''<footer class="foot"><div class="wrap">{BRAND(home)}<span>{line}</span><span class="foot-mail">{CONTACT}</span><span>\u00a9 2026 rehost.expert</span></div></footer>
-<script src="app.js?v={VER}"></script>
+<script src="app.js?v={VER}" defer></script>
 <script data-goatcounter="https://rehostexpert.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
@@ -597,7 +657,7 @@ def foot(line,home):
 # ================= HOME (generic) =================
 HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it',
  'rehost.expert rehosts and fixes broken websites for small businesses, looks after domain and certificate renewals, and takes the screen work off your desk: enquiries, social media, reviews and online admin.',
- 'Website rescue, hosting and digital services for small businesses.')+f'''
+ 'Website rescue, hosting and digital services for small businesses.', path='/')+f'''
 {TOP('#top',
     [('#broken','Broken site?'),('#services','Services'),('website-design.html','Website design'),('#ai','AI consultation'),('#sectors','Who it\u2019s for'),('business.html','Business'),('#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
     [('#broken','Broken site?'),('#services','Services'),('website-design.html','Website design'),('#what-is-ai','What is AI'),('#what-is-seo','What is SEO'),('#ai','AI consultation'),('#sectors','Who it\u2019s for'),('business.html','Business'),('#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')])}
@@ -860,7 +920,7 @@ JUMP=[('hospitality','bed','Hospitality')]+[(e[0],e[1],e[2]) for e in EXAMPLES]+
 jump_html='\n'.join(f'<a href="#{i}">{I(ic)}{E(t)}</a>' for i,ic,t in JUMP)
 BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI help for small businesses',
  'rehost.expert for small businesses: examples for hospitality, builders, trades, salons, shops, garages, clinics, professional services, farms, tour operators, clubs and charities, with what we\u2019d do and how AI can help.',
- 'Website rescue, admin and AI help for small businesses, with examples by type of business.')+f'''
+ 'Website rescue, admin and AI help for small businesses, with examples by type of business.', path='/business.html')+f'''
 {TOP('index.html',
     [('index.html','All services'),('website-design.html','Website design'),('#jump','Examples'),('#hospitality','Hospitality'),('index.html#ai','AI consultation'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
     [('index.html','All services'),('website-design.html','Website design'),('#jump','Examples'),('#hospitality','Hospitality'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')])}
@@ -952,7 +1012,7 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
 {foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
 CON=head('Contact us \u00b7 rehost.expert',
  'Contact rehost.expert: call us on +353 85 227 8203 or send us a message. Based in West Cork.',
- 'Call us or send us a message. Based in West Cork.')+f'''
+ 'Call us or send us a message. Based in West Cork.', path='/contact.html')+f'''
 {TOP('index.html',
     [('index.html#broken','Broken site?'),('index.html#services','Services'),('website-design.html','Website design'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
     [('index.html#broken','Broken site?'),('index.html#services','Services'),('website-design.html','Website design'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
@@ -970,7 +1030,9 @@ CON=head('Contact us \u00b7 rehost.expert',
 </main>
 {foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
 REDIRECT='''<!doctype html>
-<html lang="en-IE"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><title>Hospitality \u00b7 rehost.expert</title>
+<html lang="en-IE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, follow"><title>Hospitality \u00b7 rehost.expert</title>
+<link rel="canonical" href="https://rehost.expert/business.html">
 <meta http-equiv="refresh" content="0; url=business.html#hospitality"><link rel="icon" href="favicon.svg?v=__VER__" type="image/svg+xml">
 <script>location.replace('business.html#hospitality'+(location.search||''))</script></head>
 <body><p>This page has moved to <a href="business.html#hospitality">Business examples: Hospitality</a>.</p>
@@ -980,7 +1042,7 @@ REDIRECT='''<!doctype html>
 # ================= WEBSITE BUILDING AND REDESIGN =================
 WD=head('Website building and redesign \u00b7 rehost.expert',
  'New website builds and redesigns of existing sites for small businesses. Mobile-friendly, fast and secure, with SEO basics, easy updates, and hosting or rehosting on your own domain.',
- 'New websites and redesigns for small businesses, with hosting and ongoing care.')+f'''
+ 'New websites and redesigns for small businesses, with hosting and ongoing care.', path='/website-design.html')+f'''
 {TOP('index.html',
     [('index.html#broken','Broken site?'),('index.html#services','Services'),('website-design.html','Website design'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
     [('index.html#broken','Broken site?'),('index.html#services','Services'),('website-design.html','Website design'),('index.html#what-is-ai','What is AI'),('index.html#what-is-seo','What is SEO'),('index.html#ai','AI consultation'),('index.html#sectors','Who it\u2019s for'),('business.html','Business'),('index.html#packages','Packages'),('contact.html','Contact us'),('#contact','Get in touch','btn')],
@@ -1114,3 +1176,28 @@ for fn,pg in (('index.html',HOME),('business.html',BUS),('contact.html',CON),('w
     open(OUTDIR+fn,'w',encoding='utf-8').write(pg)
     print('wrote',fn,len(pg))
 print('wrote search-index.json',len(INDEX),'entries')
+
+robots='User-agent: *\nAllow: /\n\nSitemap: https://rehost.expert/sitemap.xml\n'
+open(OUTDIR+'robots.txt','w',encoding='utf-8').write(robots)
+print('wrote robots.txt')
+
+from datetime import date
+today=date.today().isoformat()
+public=(
+    ('https://rehost.expert/', '1.0'),
+    ('https://rehost.expert/business.html', '0.8'),
+    ('https://rehost.expert/website-design.html', '0.8'),
+    ('https://rehost.expert/contact.html', '0.7'),
+)
+urls=''.join(
+    f'  <url>\n    <loc>{loc}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pri}</priority>\n  </url>\n'
+    for loc,pri in public
+)
+sitemap=(
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    +urls+
+    '</urlset>\n'
+)
+open(OUTDIR+'sitemap.xml','w',encoding='utf-8').write(sitemap)
+print('wrote sitemap.xml',len(public),'urls')
